@@ -1,4 +1,4 @@
-package com.dku.mentoring.team.entity;
+package com.dku.mentoring.team.model.entity;
 
 import com.dku.mentoring.user.entity.User;
 import lombok.AllArgsConstructor;
@@ -15,15 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 public class Team {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @Column(name = "team_id", nullable = false)
     private Long id;
-
 
     @OneToMany(mappedBy = "team",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();
 
     private String teamName;
+
+    private int score;
 }

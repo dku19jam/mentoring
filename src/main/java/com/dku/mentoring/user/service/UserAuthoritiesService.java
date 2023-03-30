@@ -1,8 +1,8 @@
-package com.dku.mentoring.service;
+package com.dku.mentoring.user.service;
 
 
 import auth.SecurityUser;
-import com.dku.mentoring.repository.UserRepository;
+import com.dku.mentoring.user.repository.UserRepository;
 import com.dku.mentoring.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

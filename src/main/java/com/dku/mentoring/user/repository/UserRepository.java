@@ -1,4 +1,4 @@
-package com.dku.mentoring.repository;
+package com.dku.mentoring.user.repository;
 
 import com.dku.mentoring.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

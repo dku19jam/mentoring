@@ -1,6 +1,6 @@
 package auth;
 
-import com.dku.mentoring.service.UserAuthoritiesService;
+import com.dku.mentoring.user.service.UserAuthoritiesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.*;

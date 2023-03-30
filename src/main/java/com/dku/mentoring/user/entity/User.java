@@ -1,6 +1,6 @@
 package com.dku.mentoring.user.entity;
 
-import com.dku.mentoring.team.entity.Team;
+import com.dku.mentoring.team.model.entity.Team;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class User {
 
-    @Id
+    @Id @GeneratedValue
     private Long userId;
 
     private String password;
