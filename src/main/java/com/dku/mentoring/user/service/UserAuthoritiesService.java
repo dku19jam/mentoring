@@ -18,6 +18,7 @@ public class UserAuthoritiesService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         if (userId.isBlank()) {

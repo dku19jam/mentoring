@@ -1,4 +1,4 @@
-package com.dku.mentoring;
+package com.dku.mentoring.base;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;

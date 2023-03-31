@@ -1,6 +1,6 @@
 package com.dku.mentoring.register.model.entity;
 
-import com.dku.mentoring.BaseEntity;
+import com.dku.mentoring.base.BaseEntity;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.user.entity.User;
 import lombok.Getter;
@@ -34,7 +34,7 @@ public class Register extends BaseEntity {
     private Mission mission;
 
     @OneToMany(mappedBy = "register", cascade = CascadeType.ALL)
-    private List<RegisterImage> images;
+    private List<RegisterFile> files;
 
     public Register(User user, String title, String body) {
         this.user = user;
