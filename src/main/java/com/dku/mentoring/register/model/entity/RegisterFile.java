@@ -1,6 +1,7 @@
 package com.dku.mentoring.register.model.entity;
 
 import com.dku.mentoring.base.BaseEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,8 +23,14 @@ public class RegisterFile extends BaseEntity {
 
     private String fileName;
 
-    public RegisterFile (String fileId, String fileName) {
+    private String fileUrl;
+
+    @Builder
+
+    public RegisterFile(Register register, String fileId, String fileName, String fileUrl) {
+        this.register = register;
         this.fileId = fileId;
         this.fileName = fileName;
+        this.fileUrl = fileUrl;
     }
 }
