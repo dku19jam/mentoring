@@ -20,11 +20,11 @@ public class UserAuthoritiesService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        if (userId.isBlank()) {
+    public UserDetails loadUserByUsername(String studentId) throws UsernameNotFoundException {
+        if (studentId.isBlank()) {
             //TODO implement exception
         }
-        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow();
+        User user = userRepository.findById(Long.valueOf(studentId)).orElseThrow();
 
         return new SecurityUser(user);
     }
