@@ -26,7 +26,7 @@ public class JwtProvider {
     private String secretKey;
     private UserAuthoritiesService userAuthoritiesService;
 
-    private Long jwtValidityTime = 4 * 60 * 60 * 1000L; //4시간
+    private Long jwtValidityTime = 8 * 60 * 60 * 1000L; //8시간
     private Long refreshValidityTime = 14 * 24 * 60 * 60 * 1000L; //2주
 
     public String createAccessToken(String payload, List<String> roles) {

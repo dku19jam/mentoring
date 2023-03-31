@@ -16,6 +16,8 @@ public class RegisterService<E extends Register> {
     protected final UserRepository userRepository;
     protected final FileUploadService fileUploadService;
 
+    //TODO implement exception
+
     @Transactional(readOnly = true)
     public Page<RegisterDto> list(Specification<E> spec, Pageable pageable, int bodySize) {
         Page<E> result = list(spec, pageable);

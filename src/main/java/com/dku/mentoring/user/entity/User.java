@@ -19,7 +19,10 @@ import java.util.List;
 public class User {
 
     @Id @GeneratedValue
-    private Long userId;
+    @Column(name ="user_id")
+    private Long id;
+
+    private String studentId;
 
     private String password;
 
@@ -32,8 +35,8 @@ public class User {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public User(Long userId, String password, String name) {
-        this.userId = userId;
+    public User(String studentId, String password, String name) {
+        this.studentId = studentId;
         this.password = password;
         this.name = name;
     }
