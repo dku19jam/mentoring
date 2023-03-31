@@ -1,8 +1,8 @@
-package com.dku.mentoring.service;
+package com.dku.mentoring.user.service;
 
 
 import auth.SecurityUser;
-import com.dku.mentoring.repository.UserRepository;
+import com.dku.mentoring.user.repository.UserRepository;
 import com.dku.mentoring.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +18,7 @@ public class UserAuthoritiesService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         if (userId.isBlank()) {
