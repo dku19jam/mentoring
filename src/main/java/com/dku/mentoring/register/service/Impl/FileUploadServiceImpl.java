@@ -39,13 +39,6 @@ public class FileUploadServiceImpl implements FileUploadService {
             File file = new File(dir, fileName);
             try {
                 multipartFile.transferTo(file);
-                File thumbnailFile = new File(dir, "s_" + fileName);
-
-                BufferedImage bufferedImage = ImageIO.read(file);
-
-                int thumbnailRatio = 3;
-                int width = bufferedImage.getWidth() / thumbnailRatio;
-                int height = bufferedImage.getHeight() / thumbnailRatio;
 
                 RegisterFile registerFile = RegisterFile.builder()
                         .fileUrl(dir)
