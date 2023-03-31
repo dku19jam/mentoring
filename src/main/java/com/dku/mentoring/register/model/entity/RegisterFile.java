@@ -26,9 +26,4 @@ public class RegisterFile extends BaseEntity {
         this.fileId = fileId;
         this.fileName = fileName;
     }
-
-    public RegisterFile(UploadedFile file) {
-        this(file.getFileId(), file.getOriginalName());
-    }
-
 }

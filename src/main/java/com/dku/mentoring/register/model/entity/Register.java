@@ -33,6 +33,9 @@ public class Register extends BaseEntity {
     @JoinColumn(name = "mission_id")
     private Mission mission;
 
+    @Enumerated(EnumType.STRING)
+    private RegisterStatus status;
+
     @OneToMany(mappedBy = "register", cascade = CascadeType.ALL)
     private List<RegisterFile> files;
 

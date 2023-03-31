@@ -24,8 +24,6 @@ public class Mission extends BaseEntity{
 
     private int point;
 
-    private MissionStatus status;
-
     @OneToMany(mappedBy = "mission", cascade = ALL, orphanRemoval = true)
     private List<Register> registers = new ArrayList<>();
 }
