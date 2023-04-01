@@ -22,6 +22,8 @@ public class RegisterDto {
 
     private final LocalDateTime createdAt;
 
+    private final LocalDateTime lastModifiedAt;
+
     private final Mission mission;
 
     private final List<RegisterFileDto> files;
@@ -33,6 +35,7 @@ public class RegisterDto {
         this.body = register.getBody();
         this.createdAt = register.getCreatedAt();
         this.mission = register.getMission();
+        this.lastModifiedAt = register.getLastModifiedAt();
         this.files = RegisterFileDto.listOf(baseImageUrl, register.getFiles());
     }
 }

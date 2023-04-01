@@ -28,4 +28,11 @@ public class Mission extends BaseEntity{
 
     @OneToMany(mappedBy = "mission", cascade = ALL, orphanRemoval = true)
     private List<Register> registers = new ArrayList<>();
+
+
+    public Mission(String description, int point, Category category) {
+        this.description = description;
+        this.point = point;
+        this.category = category;
+    }
 }
