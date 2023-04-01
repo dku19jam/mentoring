@@ -3,6 +3,7 @@ package com.dku.mentoring.mission.model.entity;
 import com.dku.mentoring.base.BaseEntity;
 import com.dku.mentoring.register.model.entity.Register;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +31,9 @@ public class Mission extends BaseEntity{
     private List<Register> registers = new ArrayList<>();
 
 
-    public Mission(String description, int point, Category category) {
+    @Builder
+    public Mission(Long id, String description, int point, Category category) {
+        this.id = id;
         this.description = description;
         this.point = point;
         this.category = category;

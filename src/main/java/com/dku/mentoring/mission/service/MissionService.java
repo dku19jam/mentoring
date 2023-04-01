@@ -1,9 +1,7 @@
 package com.dku.mentoring.mission.service;
 
-import com.dku.mentoring.base.ResponsePage;
 import com.dku.mentoring.mission.model.dto.MissionDto;
 import com.dku.mentoring.mission.model.dto.MissionResponsePage;
-import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

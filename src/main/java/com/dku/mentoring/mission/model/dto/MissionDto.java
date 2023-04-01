@@ -14,6 +14,7 @@ public class MissionDto {
 
     @Builder
     public MissionDto(Mission mission) {
+        this.id = mission.getId();
         this.description = mission.getDescription();
         this.point = mission.getPoint();
         this.category = mission.getCategory();

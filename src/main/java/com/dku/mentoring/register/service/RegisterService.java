@@ -1,54 +1,40 @@
 package com.dku.mentoring.register.service;
 
-import com.dku.mentoring.register.model.dto.RegisterDto;
+import com.dku.mentoring.base.dto.response.ResponsePage;
+import com.dku.mentoring.mission.model.entity.Mission;
+import com.dku.mentoring.mission.repository.MissionRepository;
+import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
+import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.register.repository.RegisterRepository;
+import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 @RequiredArgsConstructor
-public class RegisterService<E extends Register> {
-    protected final RegisterRepository<E> registerRepository;
-    protected final UserRepository userRepository;
-    protected final FileUploadService fileUploadService;
+@Transactional(readOnly = true)
+public class RegisterService{
+    private final RegisterRepository registerRepository;
+    private final UserRepository userRepository;
+    private final MissionRepository missionRepository;
 
-    //TODO implement exception
+    public Long createRegister(Long userId,RegisterRequestDto dto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+        Mission mission = missionRepository.findById(dto.getMissionId()).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
+        Register register = dto.toEntity(user, mission);
 
-    @Transactional(readOnly = true)
-    public Page<RegisterDto> list(Specification<E> spec, Pageable pageable, int bodySize) {
-        Page<E> result = list(spec, pageable);
-        return result.map((register) -> makeListDto(bodySize, register));
+        registerRepository.save(register);
+        return register.getId();
+        //TODO 코드 수정
     }
 
-    @Transactional(readOnly = true)
-    public <T> Page<T> list(Specification<E> spec, Pageable pageable, int bodySize,
-                            RegisterResultMapper<T, RegisterDto, E> mapper) {
-        Page<E> result = list(spec, pageable);
-
-        return result.map((register) -> {
-            RegisterDto dto = makeListDto(bodySize, register);
-            return mapper.map(dto, register);
-        });
+    public Page<SummarizedRegisterDto> getRegisters(Pageable pageable) {
+        Page<Register> registers = registerRepository.findAll(pageable);
+        return registers.map(SummarizedRegisterDto::new);
     }
-
-    private Page<E> list(Specification<E> spec, Pageable pageable) {
-        if (spec == null) {
-            spec = Specification.where(null);
-        }
-        return registerRepository.findAll(spec, pageable);
-    }
-
-    private RegisterDto makeListDto(int bodySize, E register) {
-        return new RegisterDto(fileUploadService.getBaseURL(), register);
-    }
-
-    @FunctionalInterface
-    public interface RegisterResultMapper<T, D, E extends Register> {
-        T map(D dto, E register);
-    }
-
 }
