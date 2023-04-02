@@ -2,10 +2,14 @@ package com.dku.mentoring.mission.model.dto;
 
 import com.dku.mentoring.mission.model.entity.Category;
 import com.dku.mentoring.mission.model.entity.Mission;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MissionDto {
     private Long id;
     private String description;

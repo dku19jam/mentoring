@@ -27,6 +27,7 @@ public class UserAuthoritiesService implements UserDetailsService {
         User user = userRepository.findByStudentId(studentId).orElseThrow(
                 () -> new UsernameNotFoundException("해당 학번이 존재하지 않습니다."));
 
+
         return new SecurityUser(user);
     }
 }
