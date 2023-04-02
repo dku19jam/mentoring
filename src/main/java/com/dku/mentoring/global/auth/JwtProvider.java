@@ -1,5 +1,6 @@
-package auth;
+package com.dku.mentoring.global.auth;
 
+import com.dku.mentoring.user.entity.UserRole;
 import com.dku.mentoring.user.service.UserAuthoritiesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,16 +23,17 @@ import java.util.*;
 @Slf4j
 public class JwtProvider {
 
-    @Value("${jwt-key}")
+    @Value("${jwt.secret}")
     private String secretKey;
     private UserAuthoritiesService userAuthoritiesService;
 
-    private Long jwtValidityTime = 4 * 60 * 60 * 1000L; //4시간
+    private Long jwtValidityTime = 8 * 60 * 60 * 1000L; //8시간
     private Long refreshValidityTime = 14 * 24 * 60 * 60 * 1000L; //2주
 
-    public String createAccessToken(String payload, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(payload);
-        claims.put("role", roles);
+    //토큰 생성
+    public String createAccessToken(String studentId, List<UserRole> roles) {
+        Claims claims = Jwts.claims().setSubject(studentId);
+        claims.put("roles", roles);
         Date now = new Date();
         Date validityTime = new Date(now.getTime() + jwtValidityTime);
 
@@ -43,14 +45,16 @@ public class JwtProvider {
                 .compact();
     }
 
+    //권한정보 획득
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userAuthoritiesService.loadUserByUsername(this.extractEmail(token));
+        UserDetails userDetails = userAuthoritiesService.loadUserByUsername(this.getStudentId(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String extractEmail(String token) {
+    //토큰에 있는 studentId 획득
+    public String getStudentId(String token) {
         try {
-            return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("sub");
+            return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
         }catch (ExpiredJwtException e) {
             return e.getClaims().getSubject();
         } catch (SignatureException e) {
@@ -58,6 +62,7 @@ public class JwtProvider {
         }
     }
 
+    //Authorization Header를 통해 인증
     public String resolveToken(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         if (header == null) {
@@ -66,6 +71,7 @@ public class JwtProvider {
         return header.replace("Bearer ", "");
     }
 
+    //토큰 유효성 검사
     public boolean validateJwtToken(String token) throws JwtException{
         Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey)
                 .parseClaimsJws(token);

@@ -1,7 +1,7 @@
 package com.dku.mentoring.user.service;
 
 
-import auth.SecurityUser;
+import com.dku.mentoring.global.auth.SecurityUser;
 import com.dku.mentoring.user.repository.UserRepository;
 import com.dku.mentoring.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -18,12 +18,14 @@ public class UserAuthoritiesService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        if (userId.isBlank()) {
+    public UserDetails loadUserByUsername(String studentId) throws UsernameNotFoundException {
+        if (studentId.isBlank()) {
             //TODO implement exception
         }
-        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow();
+        User user = userRepository.findByStudentId(studentId).orElseThrow(
+                () -> new UsernameNotFoundException("해당 학번이 존재하지 않습니다."));
 
         return new SecurityUser(user);
     }

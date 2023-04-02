@@ -1,4 +1,4 @@
-package auth;
+package com.dku.mentoring.global.auth;
 
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final JwtProvider jwtProvider;
 
+    private final JwtProvider jwtProvider;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
