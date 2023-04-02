@@ -24,7 +24,7 @@ public class UserAuthoritiesService implements UserDetailsService {
         if (studentId.isBlank()) {
             //TODO implement exception
         }
-        User user = userRepository.findById(Long.valueOf(studentId)).orElseThrow();
+        User user = userRepository.findByStudentId(studentId).orElseThrow();
 
         return new SecurityUser(user);
     }
