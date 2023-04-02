@@ -1,4 +1,4 @@
-package com.dku.mentoring.base;
+package com.dku.mentoring.global.base;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass
 public class BaseEntity {
+
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;

@@ -1,4 +1,4 @@
-package com.dku.mentoring.global;
+package com.dku.mentoring.global.base.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.dku.mentoring.mission.model.entity;
 
-import com.dku.mentoring.base.BaseEntity;
+import com.dku.mentoring.global.base.BaseEntity;
 import com.dku.mentoring.register.model.entity.Register;
 import lombok.AccessLevel;
 import lombok.Builder;

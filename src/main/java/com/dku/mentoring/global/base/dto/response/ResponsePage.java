@@ -1,4 +1,4 @@
-package com.dku.mentoring.base.dto.response;
+package com.dku.mentoring.global.base.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
