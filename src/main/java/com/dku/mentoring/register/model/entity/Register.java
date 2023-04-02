@@ -2,6 +2,7 @@ package com.dku.mentoring.register.model.entity;
 
 import com.dku.mentoring.global.base.BaseEntity;
 import com.dku.mentoring.mission.model.entity.Mission;
+import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -46,5 +47,10 @@ public class Register extends BaseEntity {
         this.body = body;
         this.mission = mission;
         this.status = RegisterStatus.PROGRESS;
+    }
+
+    public void update(RegisterRequestDto dto) {
+        this.title = dto.getTitle();
+        this.body = dto.getBody();
     }
 }

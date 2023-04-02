@@ -2,7 +2,6 @@ package com.dku.mentoring.register.model.dto.request;
 
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.register.model.entity.Register;
-import com.dku.mentoring.register.model.entity.RegisterStatus;
 import com.dku.mentoring.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -27,5 +26,13 @@ public class RegisterRequestDto {
         this.title = title;
         this.body = body;
         this.missionId = missionId;
+    }
+    public Register toEntity(User user, Mission mission) {
+        return Register.builder()
+                .user(user)
+                .title(title)
+                .body(body)
+                .mission(mission)
+                .build();
     }
 }
