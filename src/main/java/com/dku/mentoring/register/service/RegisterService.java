@@ -1,6 +1,5 @@
 package com.dku.mentoring.register.service;
 
-import com.dku.mentoring.base.dto.response.ResponsePage;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
@@ -18,18 +17,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class RegisterService{
+public class RegisterService {
     private final RegisterRepository registerRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
 
-    public Long createRegister(Long userId,RegisterRequestDto dto) {
+    @Transactional
+    public Long createRegister(Long userId, RegisterRequestDto dto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
         Mission mission = missionRepository.findById(dto.getMissionId()).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
-        Register register = dto.toEntity(user, mission);
 
-        registerRepository.save(register);
-        return register.getId();
+        Register register = Register.builder()
+                .user(user)
+                .title(dto.getTitle())
+                .body(dto.getBody())
+                .mission(mission)
+                .build();
+
+        Register savedPost = registerRepository.save(register);
+        return savedPost.getId();
         //TODO 코드 수정
     }
 

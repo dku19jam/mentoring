@@ -1,7 +1,7 @@
 package com.dku.mentoring.register.controller;
 
-import com.dku.mentoring.base.dto.response.ResponsePage;
-import com.dku.mentoring.global.ResponseIdDto;
+import com.dku.mentoring.global.base.dto.response.ResponsePage;
+import com.dku.mentoring.global.base.dto.request.ResponseIdDto;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.service.RegisterService;
@@ -31,12 +31,10 @@ public class RegisterController {
         registerService.getRegisters(pageable);
         return new ResponsePage<>(registerService.getRegisters(pageable));
     }
-
-    //TODO 코드 수정
     @Operation(summary = "등록", responses = {@ApiResponse(responseCode = "200", description = "등록 성공")})
     @PostMapping
     public ResponseIdDto register(Long userId, @Valid @RequestBody RegisterRequestDto registerRequestDto) {
-        Long registerId = registerService.createRegister(userId,registerRequestDto);
+        Long registerId = registerService.createRegister(userId, registerRequestDto);
         return new ResponseIdDto(registerId);
     }
 }

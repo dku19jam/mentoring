@@ -28,13 +28,4 @@ public class RegisterRequestDto {
         this.body = body;
         this.missionId = missionId;
     }
-    public Register toEntity(User user, Mission mission) {
-        return Register.builder()
-                .user(user)
-                .title(title)
-                .body(body)
-                .mission(mission)
-                .status(RegisterStatus.PROGRESS)
-                .build();
-    }
 }

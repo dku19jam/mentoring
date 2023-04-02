@@ -1,4 +1,4 @@
-package auth;
+package com.dku.mentoring.global.auth;
 
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;

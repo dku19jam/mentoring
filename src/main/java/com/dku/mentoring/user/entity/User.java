@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,21 +36,24 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Register> registers = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private Team team;
 
     @Builder
-    public User(String studentId, String password, String name, List<UserRole> roles, List<Register> registers, Team team) {
+    public User(String studentId, String password, String name, List<UserRole> roles) {
         this.studentId = studentId;
         this.password = password;
         this.name = name;
         this.roles = roles;
+    }
+
+    public void addRole(List<UserRole> role){
+        this.roles = role;
+        role.forEach(r -> r.setUser(this));
+    }
+
+    public void setTeam(Team team) {
         this.team = team;
     }
-
-    public void addRole(UserRole role) {
-        this.roles.add(role);
-    }
-
 }

@@ -1,4 +1,4 @@
-package auth.refreshToken;
+package com.dku.mentoring.global.auth.refreshToken;
 
 import org.springframework.data.repository.CrudRepository;
 
