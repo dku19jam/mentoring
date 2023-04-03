@@ -22,8 +22,9 @@ public class UserController {
 
     @Operation(summary = "회원가입", description = "회원가입을 합니다.")
     @PostMapping("/signup")
-    public void signup(@RequestBody RequestSignUpDto dto) {
+    public String signup(@RequestBody RequestSignUpDto dto) {
         userService.signUp(dto);
+        return "회원가입이 완료되었습니다.";
     }
 
     @Operation(summary = "로그인", description = "로그인을 합니다.")

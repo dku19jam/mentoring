@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
         servers = {
                 @Server(url = "/", description = "로컬 서버")
         }
+
+        //TODO authorization 구현
 )
 public class SwaggerConfig {
     public static final String API_VERSION = "v1.0.0";

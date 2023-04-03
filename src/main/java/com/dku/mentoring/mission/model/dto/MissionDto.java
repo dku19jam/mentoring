@@ -23,4 +23,12 @@ public class MissionDto {
         this.point = mission.getPoint();
         this.category = mission.getCategory();
     }
+
+    public Mission toEntity() {
+        return Mission.builder()
+                .description(description)
+                .point(point)
+                .category(category)
+                .build();
+    }
 }

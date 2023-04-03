@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,8 @@ public class RegisterController {
     public ResponsePage<SummarizedRegisterDto> getRegisters(@RequestParam(defaultValue = "1") int page,
                                                             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        registerService.getRegisters(pageable);
-        return new ResponsePage<>(registerService.getRegisters(pageable));
+        Page<SummarizedRegisterDto> registers = registerService.getRegisters(pageable);
+        return new ResponsePage<>(registers);
     }
     @Operation(summary = "미션 인증 글 등록", responses = {@ApiResponse(responseCode = "200", description = "등록 성공")})
     @PostMapping
@@ -63,7 +64,15 @@ public class RegisterController {
 
     @Operation(summary = "등록 글 삭제", responses = {@ApiResponse(responseCode = "200", description = "등록 글 삭제 성공")})
     @DeleteMapping("/{registerId}")
-    public void deleteRegister(@PathVariable Long registerId, @Valid Long userId) {
+    public String deleteRegister(@PathVariable Long registerId, @Valid Long userId) {
         registerService.deleteRegister(registerId, userId);
+        return "삭제 성공";
+    }
+
+    @Operation(summary = "등록 글 승인", responses = {@ApiResponse(responseCode = "200", description = "등록 글 승인 성공")})
+    @PutMapping("/{registerId}/approve")
+    public String approveRegister(@PathVariable Long registerId, @Valid Long userId) {
+        registerService.approveRegister(registerId, userId);
+        return "승인 성공";
     }
 }

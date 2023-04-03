@@ -24,11 +24,18 @@ public class Team {
 
     private int score;
 
+    //TODO : consider to add mentee
+
     @Builder
     public Team(User user, String teamName) {
         this.user = user;
         this.teamName = teamName;
         this.score = 0;
     }
+
+    public void addScore(int point) {
+        this.score += point;
+    }
+
 
 }

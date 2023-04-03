@@ -35,6 +35,7 @@ public class SecurityConfig {
             "/api-docs/admin/**"
     };
 
+    //TODO set URI with authority
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{

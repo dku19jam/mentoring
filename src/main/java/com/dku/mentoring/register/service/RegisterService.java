@@ -6,6 +6,7 @@ import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.model.dto.response.ResponseSingleRegisterDto;
 import com.dku.mentoring.register.model.entity.Register;
+import com.dku.mentoring.register.model.entity.RegisterStatus;
 import com.dku.mentoring.register.repository.RegisterRepository;
 import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.repository.UserRepository;
@@ -34,6 +35,11 @@ public class RegisterService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
         Mission mission = missionRepository.findById(dto.getMissionId()).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
 
+        for(Register register : user.getRegisters()) {
+            if(register.getMission().getId().equals(mission.getId()))
+                throw new IllegalArgumentException("이미 등록한 미션입니다.");
+        }
+
         Register register = dto.toEntity(user, mission);
 
         Register savedPost = registerRepository.save(register);
@@ -58,7 +64,7 @@ public class RegisterService {
      * @return 페이징된 목록
      */
     public Page<SummarizedRegisterDto> getRegisters(Pageable pageable) {
-        Page<Register> registers = registerRepository.findAll(pageable);
+        Page<Register> registers = registerRepository.findAllRegisters(pageable);
         return registers.map(SummarizedRegisterDto::new);
     }
 
@@ -84,7 +90,6 @@ public class RegisterService {
     @Transactional
     public Long updateRegister(Long registerId, Long userId, RegisterRequestDto dto) {
         Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
         if(!register.getUser().getId().equals(userId))
             throw new IllegalArgumentException("해당 권한이 없습니다.");
         register.update(dto);
@@ -100,9 +105,23 @@ public class RegisterService {
     @Transactional
     public void deleteRegister(Long registerId, Long userId) {
         Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
         if(!register.getUser().getId().equals(userId))
             throw new IllegalArgumentException("해당 권한이 없습니다.");
         registerRepository.delete(register);
+    }
+
+    /**
+     * 등록 글 승인
+     *
+     * @param registerId 승인할 글 id
+     * @param userId     관리자 id
+     */
+    @Transactional
+    public void approveRegister(Long registerId, Long userId) {
+        Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+        if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN")))
+            throw new IllegalArgumentException("해당 권한이 없습니다.");
+        register.approve();
     }
 }

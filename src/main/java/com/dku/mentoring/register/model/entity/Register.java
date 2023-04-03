@@ -7,7 +7,6 @@ import com.dku.mentoring.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -52,5 +51,10 @@ public class Register extends BaseEntity {
     public void update(RegisterRequestDto dto) {
         this.title = dto.getTitle();
         this.body = dto.getBody();
+    }
+
+    public void approve() {
+        this.status = RegisterStatus.COMPLETE;
+        this.getUser().getTeam().addScore(mission.getPoint());
     }
 }
