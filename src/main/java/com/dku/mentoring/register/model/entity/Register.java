@@ -2,6 +2,7 @@ package com.dku.mentoring.register.model.entity;
 
 import com.dku.mentoring.global.base.BaseEntity;
 import com.dku.mentoring.mission.model.entity.Mission;
+import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.user.entity.User;
 import lombok.Builder;
@@ -55,6 +56,25 @@ public class Register extends BaseEntity {
 
     public void approve() {
         this.status = RegisterStatus.COMPLETE;
+        if(this.getMission().getBonusList() != null){
+            for(MissionBonus missionBonus : this.getMission().getBonusList()) {
+                this.getUser().getTeam().addScore(missionBonus.getPlusPoint());
+            }
+        }
         this.getUser().getTeam().addScore(mission.getPoint());
+
     }
+
+    public int getTotalScore() {
+        if(mission.getBonusList().isEmpty()) {
+            return mission.getPoint();
+        } else
+            return mission.getPoint() + mission.getBonusList().stream().mapToInt(MissionBonus::getPlusPoint).sum();
+    }
+
+
+    public void setMission(Mission mission) {
+        this.mission = mission;
+    }
+
 }

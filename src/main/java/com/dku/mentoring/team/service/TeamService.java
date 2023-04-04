@@ -1,13 +1,10 @@
 package com.dku.mentoring.team.service;
 
-import com.dku.mentoring.mission.model.entity.Mission;
-import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.register.model.entity.RegisterStatus;
 import com.dku.mentoring.team.model.entity.Team;
-import com.dku.mentoring.team.model.entity.dto.list.SummarizedTeamDto;
-import com.dku.mentoring.team.model.entity.dto.reponse.TeamSpecResponseDto;
+import com.dku.mentoring.team.model.dto.list.SummarizedTeamDto;
+import com.dku.mentoring.team.model.dto.reponse.TeamSpecResponseDto;
 import com.dku.mentoring.team.repository.TeamRepository;
-import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

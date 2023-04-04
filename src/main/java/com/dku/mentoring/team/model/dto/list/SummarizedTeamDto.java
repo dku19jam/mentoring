@@ -1,7 +1,6 @@
-package com.dku.mentoring.team.model.entity.dto.list;
+package com.dku.mentoring.team.model.dto.list;
 
 import com.dku.mentoring.team.model.entity.Team;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 

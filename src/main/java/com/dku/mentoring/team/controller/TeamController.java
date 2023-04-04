@@ -1,8 +1,8 @@
 package com.dku.mentoring.team.controller;
 
 import com.dku.mentoring.global.base.dto.response.ResponsePage;
-import com.dku.mentoring.team.model.entity.dto.list.SummarizedTeamDto;
-import com.dku.mentoring.team.model.entity.dto.reponse.TeamSpecResponseDto;
+import com.dku.mentoring.team.model.dto.list.SummarizedTeamDto;
+import com.dku.mentoring.team.model.dto.reponse.TeamSpecResponseDto;
 import com.dku.mentoring.team.service.TeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

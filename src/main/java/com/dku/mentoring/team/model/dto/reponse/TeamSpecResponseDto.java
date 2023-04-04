@@ -1,14 +1,11 @@
-package com.dku.mentoring.team.model.entity.dto.reponse;
+package com.dku.mentoring.team.model.dto.reponse;
 
-import com.dku.mentoring.mission.model.entity.Mission;
-import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.team.model.entity.Team;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 public class TeamSpecResponseDto {
@@ -22,6 +19,9 @@ public class TeamSpecResponseDto {
     @Schema(description = "팀 이름", example = "팀 이름")
     private final String teamName;
 
+    @Schema(description = "멘티", example = "멘티")
+    private final String mentee;
+
     @Schema(description = "팀 점수", example = "100")
     private final int score;
 
@@ -32,6 +32,7 @@ public class TeamSpecResponseDto {
         this.id = team.getId();
         this.userName_mentor = team.getUser().getName();
         this.teamName = team.getTeamName();
+        this.mentee = team.getMentee();
         this.score = team.getScore();
         this.completedMission = missions;
     }

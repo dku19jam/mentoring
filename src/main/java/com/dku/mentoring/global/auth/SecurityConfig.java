@@ -31,12 +31,6 @@ public class SecurityConfig {
             "/swagger-ui/**", "/api-docs/**"
     };
 
-    private static final String[] ADMIN_URI = {
-            "/api-docs/admin/**"
-    };
-
-    //TODO set URI with authority
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http

@@ -1,6 +1,10 @@
 package com.dku.mentoring.global;
 
+import com.dku.mentoring.global.auth.JwtProvider;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,8 +19,10 @@ import org.springframework.context.annotation.Configuration;
                 @Server(url = "/", description = "로컬 서버")
         }
 
-        //TODO authorization 구현
 )
+
 public class SwaggerConfig {
     public static final String API_VERSION = "v1.0.0";
+
+
 }

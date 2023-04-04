@@ -1,12 +1,15 @@
 package com.dku.mentoring.register.service;
 
+import com.dku.mentoring.mission.model.dto.request.MissionBonusRequestDto;
 import com.dku.mentoring.mission.model.entity.Mission;
+import com.dku.mentoring.mission.model.entity.MissionBonus;
+import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
+import com.dku.mentoring.mission.service.MissionService;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
-import com.dku.mentoring.register.model.dto.response.ResponseSingleRegisterDto;
+import com.dku.mentoring.register.model.dto.response.SingleRegisterResponseDto;
 import com.dku.mentoring.register.model.entity.Register;
-import com.dku.mentoring.register.model.entity.RegisterStatus;
 import com.dku.mentoring.register.repository.RegisterRepository;
 import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.repository.UserRepository;
@@ -16,6 +19,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,6 +29,7 @@ public class RegisterService {
     private final RegisterRepository registerRepository;
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
+    private final MissionBonusRepository missionBonusRepository;
 
     /**
      * 미션 인증 글 등록
@@ -31,16 +38,29 @@ public class RegisterService {
      * @param dto    등록할 글 dto
      */
     @Transactional
-    public Long createRegister(Long userId, RegisterRequestDto dto) {
+    public Long createRegister(Long userId, Long missionId, RegisterRequestDto dto) {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
-        Mission mission = missionRepository.findById(dto.getMissionId()).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
+        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
 
         for(Register register : user.getRegisters()) {
             if(register.getMission().getId().equals(mission.getId()))
                 throw new IllegalArgumentException("이미 등록한 미션입니다.");
         }
-
+        //TODO 추가 미션 인증을 체크 박스로 인증하고 싶음
         Register register = dto.toEntity(user, mission);
+
+        List<MissionBonusRequestDto> missionList = dto.getMissionList();
+        List<MissionBonus> bonusList = missionBonusRepository.findAllByMissionId(missionId);
+        if(bonusList != null) {
+            for (MissionBonusRequestDto missionBonusRequestDto : missionList) {
+                for (MissionBonus missionBonus : bonusList) {
+                    if (missionBonusRequestDto.getPlusMission().equals(missionBonus.getPlusMission())) {
+                        register.getMission().addRegister(register);
+                    }
+                }
+
+            }
+        }
 
         Register savedPost = registerRepository.save(register);
         return savedPost.getId();
@@ -51,9 +71,9 @@ public class RegisterService {
      *
      * @param registerId 조회할 글 id
      */
-    public ResponseSingleRegisterDto findOne(Long registerId) {
+    public SingleRegisterResponseDto findOne(Long registerId) {
         Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        return new ResponseSingleRegisterDto(register);
+        return new SingleRegisterResponseDto(register);
     }
 
     /**
