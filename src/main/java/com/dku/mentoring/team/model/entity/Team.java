@@ -22,13 +22,21 @@ public class Team {
 
     private String teamName;
 
+    private String mentee;
+
     private int score;
 
     @Builder
-    public Team(User user, String teamName) {
+    public Team(User user, String teamName, String mentee) {
         this.user = user;
         this.teamName = teamName;
         this.score = 0;
+        this.mentee = mentee;
     }
+
+    public void addScore(int point) {
+        this.score += point;
+    }
+
 
 }

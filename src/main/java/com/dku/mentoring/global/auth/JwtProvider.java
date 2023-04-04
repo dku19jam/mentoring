@@ -23,6 +23,8 @@ import java.util.*;
 @Slf4j
 public class JwtProvider {
 
+    public static final String AUTHORIZATION = "Authorization";
+
     @Value("${jwt.secret}")
     private String secretKey;
     private UserAuthoritiesService userAuthoritiesService;

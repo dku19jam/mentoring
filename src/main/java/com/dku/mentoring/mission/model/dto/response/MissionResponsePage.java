@@ -1,4 +1,4 @@
-package com.dku.mentoring.mission.model.dto;
+package com.dku.mentoring.mission.model.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

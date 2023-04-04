@@ -1,5 +1,6 @@
 package com.dku.mentoring.user.entity.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -14,15 +15,18 @@ public class RequestSignUpDto {
 
     @NotBlank
     @Size(min = 8, max = 8)
+    @Schema(description = "학번", example = "12345678")
     private final String studentId;
 
     @NotBlank
     @Size(min = 2, max = 20)
+    @Schema(description = "이름", example = "홍길동")
     private final String name;
 
     private final String teamName;
 
     @NotBlank
     @Size(min = 3, max = 200)
+    @Schema(description = "비밀번호", example = "123")
     private final String password;
 }

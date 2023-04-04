@@ -31,11 +31,6 @@ public class SecurityConfig {
             "/swagger-ui/**", "/api-docs/**"
     };
 
-    private static final String[] ADMIN_URI = {
-            "/api-docs/admin/**"
-    };
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
