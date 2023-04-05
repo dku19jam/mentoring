@@ -1,11 +1,11 @@
 package com.dku.mentoring.register.service;
 
+import com.dku.mentoring.global.auth.JwtProvider;
 import com.dku.mentoring.mission.model.dto.request.MissionBonusRequestDto;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
-import com.dku.mentoring.mission.service.MissionService;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.model.dto.response.SingleRegisterResponseDto;
@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -30,6 +31,7 @@ public class RegisterService {
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
     private final MissionBonusRepository missionBonusRepository;
+    private final JwtProvider jwtProvider;
 
     /**
      * 미션 인증 글 등록
@@ -43,8 +45,9 @@ public class RegisterService {
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
 
         for(Register register : user.getRegisters()) {
-            if(register.getMission().getId().equals(mission.getId()))
+            if(register.getMission().getId().equals(mission.getId())) {
                 throw new IllegalArgumentException("이미 등록한 미션입니다.");
+            }
         }
         //TODO 추가 미션 인증을 체크 박스로 인증하고 싶음
         Register register = dto.toEntity(user, mission);
@@ -91,12 +94,11 @@ public class RegisterService {
     /**
      * 사용자가 등록 글 전체 조회
      *
-     *  @param userId 사용자 id
      */
-    public Page<SummarizedRegisterDto> getRegistersByUser(Long userId, Pageable pageable) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
-        if(!user.getId().equals(userId))
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+    public Page<SummarizedRegisterDto> getRegistersByUser(HttpServletRequest request, Pageable pageable) {
+        User user = getMemberFromRequest(request);
+        Long userId = user.getId();
+
         Page<Register> registers = registerRepository.findByUserId(userId, pageable);
         return registers.map(SummarizedRegisterDto::new);
     }
@@ -105,13 +107,14 @@ public class RegisterService {
      * 등록 글 수정
      *
      * @param registerId 수정할 글 id
-     * @param userId     수정한 사용자 id
      */
     @Transactional
-    public Long updateRegister(Long registerId, Long userId, RegisterRequestDto dto) {
+    public Long updateRegister(Long registerId, HttpServletRequest request, RegisterRequestDto dto) {
         Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        if(!register.getUser().getId().equals(userId))
+        User user = getMemberFromRequest(request);
+        if(!register.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("해당 권한이 없습니다.");
+        }
         register.update(dto);
         return register.getId();
     }
@@ -120,13 +123,14 @@ public class RegisterService {
      * 등록 글 삭제
      *
      * @param registerId 삭제할 글 id
-     * @param userId     삭제한 사용자 id
      */
     @Transactional
-    public void deleteRegister(Long registerId, Long userId) {
+    public void deleteRegister(Long registerId, HttpServletRequest request) {
+        User user = getMemberFromRequest(request);
         Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        if(!register.getUser().getId().equals(userId))
+        if(!register.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("해당 권한이 없습니다.");
+        }
         registerRepository.delete(register);
     }
 
@@ -134,14 +138,27 @@ public class RegisterService {
      * 등록 글 승인
      *
      * @param registerId 승인할 글 id
-     * @param userId     관리자 id
      */
     @Transactional
-    public void approveRegister(Long registerId, Long userId) {
+    public void approveRegister(Long registerId, HttpServletRequest request) {
         Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
-        if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN")))
+        User user = getMemberFromRequest(request);
+        if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN"))) {
             throw new IllegalArgumentException("해당 권한이 없습니다.");
+        }
         register.approve();
+    }
+
+    /**
+     * 요청 헤더로부터 토큰 및 유저 추출
+     * @param request
+     * @return user 객체
+     */
+    public User getMemberFromRequest(HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String studentId = jwtProvider.getStudentId(token);
+        User user = userRepository.findByStudentId(studentId).orElseThrow(IllegalAccessError::new);
+
+        return user;
     }
 }

@@ -11,6 +11,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -37,8 +40,8 @@ public class Register extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RegisterStatus status;
 
-//    @OneToMany(mappedBy = "register", cascade = CascadeType.ALL)
-//    private List<RegisterFile> files = new ArrayList<>();
+    @OneToMany(mappedBy = "register", cascade = CascadeType.ALL)
+    private List<RegisterFile> files = new ArrayList<>();
 
     @Builder
     public Register(User user, String title, String body, Mission mission) {
