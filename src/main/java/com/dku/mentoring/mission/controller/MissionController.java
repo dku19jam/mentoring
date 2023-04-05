@@ -63,10 +63,5 @@ public class MissionController {
         return ResponseEntity.ok().body(missionId);
     }
 
-    @Operation(summary = "미션 인증 글 등록", description = "미션 인증 글 등록")
-    @PostMapping(value = "/{missionId}/register")
-    public ResponseIdDto register(@Valid Long userId, @PathVariable Long missionId, @Valid @RequestBody RegisterRequestDto dto) {
-        Long registerId = registerService.createRegister(userId, missionId, dto);
-        return new ResponseIdDto(registerId);
-    }
+
 }
