@@ -17,9 +17,15 @@ import java.util.stream.Collectors;
 public class SecurityUser implements UserDetails {
 
     private final User user;
+    private List<String> authorities = new ArrayList<>();
+
 
     public SecurityUser(User user) {
         this.user = user;
+        List<UserRole> roles = user.getRoles();
+        for (UserRole role : roles) {
+            authorities.add(role.getRolename());
+        }
     }
 
     @Override

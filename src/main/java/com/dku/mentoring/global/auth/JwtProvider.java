@@ -27,7 +27,7 @@ public class JwtProvider {
 
     @Value("${jwt.secret}")
     private String secretKey;
-    private UserAuthoritiesService userAuthoritiesService;
+    private final UserAuthoritiesService userAuthoritiesService;
 
     private Long jwtValidityTime = 8 * 60 * 60 * 1000L; //8시간
     private Long refreshValidityTime = 14 * 24 * 60 * 60 * 1000L; //2주
