@@ -7,6 +7,7 @@ import com.dku.mentoring.user.entity.UserRole;
 import com.dku.mentoring.user.entity.dto.request.RequestLoginDto;
 import com.dku.mentoring.user.entity.dto.request.RequestSignUpDto;
 import com.dku.mentoring.user.entity.dto.response.ResponseLoginDto;
+import com.dku.mentoring.user.exception.UserNotFoundException;
 import com.dku.mentoring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,7 +29,7 @@ public class UserService {
     @Transactional
     public Long signUp(RequestSignUpDto dto) {
         if (userRepository.findByStudentId(dto.getStudentId()).isPresent()) {
-            throw new IllegalArgumentException("이미 존재하는 학번입니다.");
+            throw new UserNotFoundException("이미 존재하는 학번입니다.");
         }
         User user = User.builder()
                 .studentId(dto.getStudentId())
@@ -50,10 +51,10 @@ public class UserService {
 
     public ResponseLoginDto login(RequestLoginDto dto) {
         User user = userRepository.findByStudentId(dto.getStudentId()).orElseThrow(() ->
-                new BadCredentialsException("학번이 존재하지 않습니다."));
+                new UserNotFoundException("학번이 존재하지 않습니다."));
 
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
+            throw new UserNotFoundException("비밀번호가 일치하지 않습니다.");
         }
 
         return ResponseLoginDto.builder()

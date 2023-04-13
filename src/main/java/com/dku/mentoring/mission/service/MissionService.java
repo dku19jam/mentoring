@@ -1,5 +1,6 @@
 package com.dku.mentoring.mission.service;
 
+import com.dku.mentoring.mission.exception.MissionNotFoundException;
 import com.dku.mentoring.mission.model.dto.request.MissionCreateRequestDto;
 import com.dku.mentoring.mission.model.dto.response.MissionBonusResponseDto;
 import com.dku.mentoring.mission.model.dto.response.MissionResponseDto;
@@ -52,7 +53,7 @@ public class MissionService {
      * 미션 상세 조회
      */
     public SingleMissionResponseDto getMission(Long id) {
-        Mission mission = missionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
+        Mission mission = missionRepository.findById(id).orElseThrow(() -> new MissionNotFoundException("해당 미션이 없습니다."));
         return new SingleMissionResponseDto(mission);
     }
 
