@@ -1,5 +1,6 @@
 package com.dku.mentoring.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,9 +26,11 @@ public class UserRole implements Serializable
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     private String rolename;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) {

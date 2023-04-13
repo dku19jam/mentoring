@@ -1,18 +1,15 @@
 package com.dku.mentoring.team.model.entity;
 
 import com.dku.mentoring.user.entity.User;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Team {
 
     @Id
@@ -20,10 +17,26 @@ public class Team {
     @Column(name = "team_id", nullable = false)
     private Long id;
 
-    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users = new ArrayList<>();
+    @OneToOne(mappedBy = "team",cascade = CascadeType.ALL, orphanRemoval = true)
+    private User user;
 
     private String teamName;
 
+    private String mentee;
+
     private int score;
+
+    @Builder
+    public Team(User user, String teamName, String mentee) {
+        this.user = user;
+        this.teamName = teamName;
+        this.score = 0;
+        this.mentee = mentee;
+    }
+
+    public void addScore(int point) {
+        this.score += point;
+    }
+
+
 }

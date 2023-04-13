@@ -1,7 +1,9 @@
 package com.dku.mentoring.user.entity;
 
+import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.team.model.entity.Team;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +21,11 @@ import java.util.List;
 public class User {
 
     @Id @GeneratedValue
-    private Long userId;
+    @Column(name ="user_id")
+    private Long id;
+
+    @Column(unique = true)
+    private String studentId;
 
     private String password;
 
@@ -28,18 +34,27 @@ public class User {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> roles = new ArrayList<>();
 
-    @ManyToOne
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Register> registers = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public User(Long userId, String password, String name) {
-        this.userId = userId;
+    @Builder
+    public User(String studentId, String password, String name, List<UserRole> roles) {
+        this.studentId = studentId;
         this.password = password;
         this.name = name;
+        this.roles = roles;
     }
 
-    public void addRole(UserRole role) {
-        this.roles.add(role);
+    public void addRole(List<UserRole> role){
+        this.roles = role;
+        role.forEach(r -> r.setUser(this));
     }
 
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

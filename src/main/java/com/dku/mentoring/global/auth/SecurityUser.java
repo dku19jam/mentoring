@@ -1,4 +1,4 @@
-package auth;
+package com.dku.mentoring.global.auth;
 
 
 import com.dku.mentoring.user.entity.User;
@@ -19,6 +19,7 @@ public class SecurityUser implements UserDetails {
     private final User user;
     private List<String> authorities = new ArrayList<>();
 
+
     public SecurityUser(User user) {
         this.user = user;
         List<UserRole> roles = user.getRoles();
@@ -29,9 +30,8 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        return user.getRoles().stream().map(o -> new SimpleGrantedAuthority(o.getRolename()
+        )).collect(Collectors.toList());
     }
 
     @Override
@@ -41,7 +41,11 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUserId().toString();
+        return user.getStudentId();
+    }
+
+    public Long getUserId() {
+        return user.getId();
     }
 
     @Override
