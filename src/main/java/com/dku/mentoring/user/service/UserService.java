@@ -10,16 +10,20 @@ import com.dku.mentoring.user.entity.dto.response.ResponseLoginDto;
 import com.dku.mentoring.user.exception.UserNotFoundException;
 import com.dku.mentoring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
@@ -56,14 +60,22 @@ public class UserService {
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new UserNotFoundException("비밀번호가 일치하지 않습니다.");
         }
-
         return ResponseLoginDto.builder()
-                .accessToken(jwtProvider.createAccessToken(user.getStudentId(), user.getRoles()))
+                .accessToken(jwtProvider.createAccessToken(user.getStudentId(), getRole(user)))
                 .refreshToken(jwtProvider.createRefreshToken(user.getStudentId()))
                 .studentId(user.getStudentId())
                 .name(user.getName())
                 .teamName(user.getTeam().getTeamName())
-                .roles(user.getRoles())
                 .build();
+    }
+
+    private List<String> getRole(User user) {
+        List<String> role = new ArrayList<>();
+        List<UserRole> roles = user.getRoles();
+        for (UserRole userRole : roles) {
+            role.add(userRole.getRolename());
+        }
+
+        return role;
     }
 }
