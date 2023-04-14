@@ -1,5 +1,6 @@
 package com.dku.mentoring.global.auth;
 
+import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.entity.UserRole;
 import com.dku.mentoring.user.service.UserAuthoritiesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,7 @@ public class JwtProvider {
     private Long refreshValidityTime = 14 * 24 * 60 * 60 * 1000L; //2주
 
     //토큰 생성
-    public String createAccessToken(String studentId, List<UserRole> roles) {
+    public String createAccessToken(String studentId, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(studentId);
         claims.put("roles", roles);
         Date now = new Date();
@@ -71,6 +72,16 @@ public class JwtProvider {
             return null;
         }
         return header.replace("Bearer ", "");
+    }
+
+    public String extractStudentId(String token){
+        try {
+            return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("sub");
+        }catch (ExpiredJwtException e) {
+            return e.getClaims().getSubject();
+        } catch (SignatureException e) {
+            throw new RuntimeException("Access Token이 올바르지 않습니다.");
+        }
     }
 
     //토큰 유효성 검사

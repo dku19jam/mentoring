@@ -21,8 +21,6 @@ public class ResponseLoginDto {
     @Schema(description = "refresh토큰")
     private  String refreshToken;
 
-    @Schema(description = "권한")
-    private List<UserRole> roles = new ArrayList<>();
 
     @Schema(description = "학번")
     private final String studentId;
@@ -37,6 +35,5 @@ public class ResponseLoginDto {
         this.studentId = user.getStudentId();
         this.name = user.getName();
         this.teamName = user.getTeam().getTeamName();
-        this.roles = user.getRoles();
     }
 }
