@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class MissionResponsePage<T> implements Serializable {
     @Schema(description = "페이지 내용")
-    private final List<T> context;
+    private final List<T> content;
 
     @Schema(description = "페이지 번호")
     private int pageNumber;
@@ -25,7 +25,7 @@ public class MissionResponsePage<T> implements Serializable {
     private long totalElements;
 
     public MissionResponsePage(Page<T> page) {
-        this.context = page.getContent();
+        this.content = page.getContent();
         this.pageNumber = page.getNumber() + 1;
         this.pageSize = page.getSize();
         this.totalPages = page.getTotalPages();

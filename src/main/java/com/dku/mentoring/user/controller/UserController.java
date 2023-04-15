@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "사용자", description = "사용자 인증 및 정보 관련 api")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
