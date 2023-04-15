@@ -24,7 +24,6 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(("/missions"))
-@Tag(name = "미션", description = "미션 관련 API")
 public class MissionController {
 
     private final MissionService missionService;

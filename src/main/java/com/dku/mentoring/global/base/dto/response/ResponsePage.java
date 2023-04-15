@@ -11,7 +11,7 @@ import java.util.List;
 public class ResponsePage<T> implements Serializable {
 
     @Schema(description = "페이지 내용")
-    private final List<T> context;
+    private final List<T> content;
 
     @Schema(description = "총 페이지 수")
     private final int totalPages;
@@ -26,7 +26,7 @@ public class ResponsePage<T> implements Serializable {
     private final int pageSize;
 
     public ResponsePage(Page<T> page) {
-        this.context = page.getContent();
+        this.content = page.getContent();
         this.pageNumber = page.getNumber() + 1;
         this.pageSize = page.getSize();
         this.totalPages = page.getTotalPages();

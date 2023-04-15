@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/team")
-@Tag(name = "팀", description = "팀 관련 API")
 public class TeamController {
 
     private final TeamService teamService;

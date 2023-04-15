@@ -6,9 +6,8 @@ import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class RegisterRequestDto {
 
@@ -28,16 +28,13 @@ public class RegisterRequestDto {
     @Schema(description = "내용")
     private String body;
 
+    private List<MultipartFile> files = new ArrayList<>();
+
     @Schema(description = "추가 미션 리스트")
     private List<MissionBonusRequestDto> missionList = new ArrayList<>();
 
 
-    @Builder
-    public RegisterRequestDto(String title, String body, List<MissionBonusRequestDto> missionList) {
-        this.title = title;
-        this.body = body;
-        this.missionList = missionList;
-    }
+
     public Register toEntity(User user, Mission mission) {
         return Register.builder()
                 .user(user)

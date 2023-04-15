@@ -36,12 +36,10 @@ public class RegisterService {
     /**
      * 미션 인증 글 등록
      *
-     * @param userId 등록한 사용자 id
      * @param dto    등록할 글 dto
      */
     @Transactional
-    public Long createRegister(Long userId, Long missionId, RegisterRequestDto dto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
+    public Long createRegister(User user, Long missionId, RegisterRequestDto dto) {
         Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
 
         for(Register register : user.getRegisters()) {
