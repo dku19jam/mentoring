@@ -40,6 +40,8 @@ public class SingleRegisterResponseDto {
     @Schema(description = "총 점수", example = "100")
     private final int totalPoint;
 
+    private final List<Long> imageIds = new ArrayList<>();
+
     @Schema(description = "등록 상태", example = "PROGRESS")
     private final RegisterStatus status;
 

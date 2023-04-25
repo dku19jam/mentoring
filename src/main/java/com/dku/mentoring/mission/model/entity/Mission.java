@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,6 +27,7 @@ public class Mission extends BaseEntity {
 
     private String description;
 
+    @Enumerated(STRING)
     private MissionInfo info;
 
     @OneToMany(mappedBy = "mission", cascade = ALL, orphanRemoval = true)
@@ -33,6 +35,7 @@ public class Mission extends BaseEntity {
 
     private int point;
 
+    @Enumerated(STRING)
     private Category category;
 
     /*

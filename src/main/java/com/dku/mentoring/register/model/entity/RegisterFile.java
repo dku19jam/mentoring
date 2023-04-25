@@ -19,17 +19,13 @@ public class RegisterFile extends BaseEntity {
     @JoinColumn(name = "register_id", nullable = false)
     private Register register;
 
-    private String fileId;
-
     private String fileName;
 
     private String fileUrl;
 
     @Builder
-
     public RegisterFile(Register register, String fileId, String fileName, String fileUrl) {
         this.register = register;
-        this.fileId = fileId;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
     }

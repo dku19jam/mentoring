@@ -1,6 +1,8 @@
 package com.dku.mentoring.register.service;
 
 import com.dku.mentoring.global.auth.JwtProvider;
+import com.dku.mentoring.mission.exception.MissionAlreadyInProgress;
+import com.dku.mentoring.mission.exception.MissionNotFoundException;
 import com.dku.mentoring.mission.model.dto.request.MissionBonusRequestDto;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
@@ -10,6 +12,7 @@ import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.model.dto.response.SingleRegisterResponseDto;
 import com.dku.mentoring.register.model.entity.Register;
+import com.dku.mentoring.register.model.entity.RegisterFile;
 import com.dku.mentoring.register.repository.RegisterRepository;
 import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.repository.UserRepository;
@@ -32,6 +35,7 @@ public class RegisterService {
     private final MissionRepository missionRepository;
     private final MissionBonusRepository missionBonusRepository;
     private final JwtProvider jwtProvider;
+    private final FileUploadService fileUploadService;
 
     /**
      * 미션 인증 글 등록
@@ -40,11 +44,11 @@ public class RegisterService {
      */
     @Transactional
     public Long createRegister(User user, Long missionId, RegisterRequestDto dto) {
-        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new IllegalArgumentException("해당 미션이 없습니다."));
+        Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new MissionNotFoundException("해당 미션이 없습니다."));
 
         for(Register register : user.getRegisters()) {
             if(register.getMission().getId().equals(mission.getId())) {
-                throw new IllegalArgumentException("이미 등록한 미션입니다.");
+                throw new MissionAlreadyInProgress("이미 등록한 미션입니다.");
             }
         }
         //TODO 추가 미션 인증을 체크 박스로 인증하고 싶음
@@ -64,6 +68,9 @@ public class RegisterService {
         }
 
         Register savedPost = registerRepository.save(register);
+
+        List<RegisterFile> registerFiles = fileUploadService.uploadImage(dto.getFiles(), user, savedPost.getId());
+        savedPost.setFiles(registerFiles);
         return savedPost.getId();
     }
 

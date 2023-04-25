@@ -15,7 +15,9 @@ public enum ErrorCode {
     MISSION_NOT_FOUND(400,"M001","미션이 조회되지 않습니다"),
     REGISTER_NOT_FOUND(400,"R001","해당 인증글이 조회되지 않습니다."),
     USER_NOT_FOUND(400,"U001","해당 유저가 조회되지 않습니다."),
-    TEAM_NOT_FOUND(400,"T001","해당 팀이 조회되지 않습니다")
+    TEAM_NOT_FOUND(400,"T002","해당 팀이 조회되지 않습니다"),
+    REGISTER_FILE_NOT_FOUND(400,"F001","파일이 조회되지 않습니다"),
+    MISSION_ALREADY_IN_PROGRESS(400,"M002","이미 등록된 미션입니다"),
     ;
 
 

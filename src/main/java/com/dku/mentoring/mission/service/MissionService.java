@@ -2,23 +2,25 @@ package com.dku.mentoring.mission.service;
 
 import com.dku.mentoring.mission.exception.MissionNotFoundException;
 import com.dku.mentoring.mission.model.dto.request.MissionCreateRequestDto;
-import com.dku.mentoring.mission.model.dto.response.MissionBonusResponseDto;
-import com.dku.mentoring.mission.model.dto.response.MissionResponseDto;
-import com.dku.mentoring.mission.model.dto.response.MissionResponsePage;
-import com.dku.mentoring.mission.model.dto.response.SingleMissionResponseDto;
+import com.dku.mentoring.mission.model.dto.response.*;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
+import com.dku.mentoring.mission.model.entity.MissionInfo;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import com.dku.mentoring.register.model.entity.Register;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -71,5 +73,28 @@ public class MissionService {
 
         missionRepository.save(newMission);
         return newMission.getId();
+    }
+
+    /**
+     * 미션 난이도 조회
+     * <p>
+     * 미션 등록 리스트에서 난이도를 선택해서 등록할 수 있게끔 하기 위해서 구현
+     */
+    public List<ResponseDifficultyListDto> getInfo() {
+        List<MissionInfo> missionInfos = Arrays.asList(MissionInfo.values());
+        return missionInfos.stream()
+                .map(ResponseDifficultyListDto::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 미션 난이도별 조회
+     *
+     * @param infoId 난이도
+     */
+    public MissionResponsePage<MissionResponseDto> getMissionsByInfoId(String infoId, Pageable pageable) {
+        MissionInfo info = MissionInfo.valueOf(infoId);
+        Page<MissionResponseDto> missions = missionRepository.findByInfo(info, pageable).map(MissionResponseDto::new);
+        return new MissionResponsePage<>(missions);
     }
 }

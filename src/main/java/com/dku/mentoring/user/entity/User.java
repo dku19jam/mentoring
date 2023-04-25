@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class User {
     @Column(name ="user_id")
     private Long id;
 
+    @NotNull
     @Column(unique = true)
     private String studentId;
 
