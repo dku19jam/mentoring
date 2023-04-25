@@ -8,6 +8,7 @@ import com.dku.mentoring.mission.model.dto.response.MissionResponsePage;
 import com.dku.mentoring.mission.model.dto.response.SingleMissionResponseDto;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
+import com.dku.mentoring.mission.model.entity.MissionInfo;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import com.dku.mentoring.register.model.entity.Register;

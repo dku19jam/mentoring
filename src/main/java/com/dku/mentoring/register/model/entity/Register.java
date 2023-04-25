@@ -57,6 +57,10 @@ public class Register extends BaseEntity {
         this.body = dto.getBody();
     }
 
+    public void setFiles(List<RegisterFile> registerFiles) {
+        this.files = registerFiles;
+    }
+
     public void approve() {
         this.status = RegisterStatus.COMPLETE;
         if(this.getMission().getBonusList() != null){
