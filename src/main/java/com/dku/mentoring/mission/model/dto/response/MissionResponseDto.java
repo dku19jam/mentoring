@@ -19,9 +19,9 @@ public class MissionResponseDto {
     private String name;
     private String description;
     private int point;
-    private Category category;
+    private String  category;
     private List<MissionBonusResponseDto> bonusList;
-    private MissionInfo info;
+    private String info;
 
     @Builder
     public MissionResponseDto(Mission mission) {
@@ -29,8 +29,8 @@ public class MissionResponseDto {
         this.name = mission.getName();
         this.description = mission.getDescription();
         this.point = mission.getPoint();
-        this.category = mission.getCategory();
+        this.category = mission.getCategory().getName();
         this.bonusList = MissionBonusResponseDto.listOf(mission.getBonusList());
-        this.info = mission.getInfo();
+        this.info = mission.getInfo().getName();
     }
 }

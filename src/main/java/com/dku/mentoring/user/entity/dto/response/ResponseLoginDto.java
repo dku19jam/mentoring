@@ -21,7 +21,6 @@ public class ResponseLoginDto {
     @Schema(description = "refresh토큰")
     private  String refreshToken;
 
-
     @Schema(description = "학번")
     private final String studentId;
 
