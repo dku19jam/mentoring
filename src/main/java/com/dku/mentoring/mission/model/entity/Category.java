@@ -1,5 +1,8 @@
 package com.dku.mentoring.mission.model.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum Category {
     STUDY("공부"),
     SPORT("운동"),

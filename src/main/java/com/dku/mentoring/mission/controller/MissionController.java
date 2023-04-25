@@ -1,25 +1,18 @@
 package com.dku.mentoring.mission.controller;
 
-import com.dku.mentoring.global.base.dto.request.ResponseIdDto;
 import com.dku.mentoring.mission.model.dto.request.MissionCreateRequestDto;
-import com.dku.mentoring.mission.model.dto.response.MissionResponseDto;
-import com.dku.mentoring.mission.model.dto.response.MissionResponsePage;
-import com.dku.mentoring.mission.model.dto.response.SingleMissionResponseDto;
-import com.dku.mentoring.mission.model.entity.Mission;
+import com.dku.mentoring.mission.model.dto.response.*;
 import com.dku.mentoring.mission.service.MissionService;
-import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
-import com.dku.mentoring.register.service.RegisterService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +20,6 @@ import javax.validation.Valid;
 public class MissionController {
 
     private final MissionService missionService;
-    private final RegisterService registerService;
 
 
     @Operation(summary = "전체 미션 조회", responses = {@ApiResponse(responseCode = "200", description = "전체 미션 조회 성공")})
@@ -62,5 +54,21 @@ public class MissionController {
         return ResponseEntity.ok().body(missionId);
     }
 
+    @Operation(summary = "미션 난이도 조회", description = "미션 난이도 조회")
+    @GetMapping("/difficulty")
+    public List<ResponseDifficultyListDto> getDifficulty() {
+        return missionService.getInfo();
+    }
+
+    //TODO 아직 구현 중
+    @Operation(summary = "미션 난이도별 조회", description = "미션 난이도별 조회")
+    @GetMapping("/difficulty/{infoId}")
+    public MissionResponsePage<MissionResponseDto> getMissionByInfo(@PathVariable String infoId,
+                                                                    @RequestParam(defaultValue = "1") int page,
+                                                                    @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        MissionResponsePage<MissionResponseDto> missions = missionService.getMissionsByInfoId(infoId, pageable);
+        return missions;
+    }
 
 }
