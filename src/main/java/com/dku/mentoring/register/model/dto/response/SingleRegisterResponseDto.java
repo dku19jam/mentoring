@@ -1,6 +1,5 @@
 package com.dku.mentoring.register.model.dto.response;
 
-import com.dku.mentoring.mission.model.dto.response.MissionBonusResponseDto;
 import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.register.model.entity.RegisterStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,9 +33,6 @@ public class SingleRegisterResponseDto {
     @Schema(description = "미션 포인트", example = "50")
     private final int missionPoint;
 
-    @Schema(description = "추가 미션", example = "추가 미션")
-    private List<MissionBonusResponseDto> missionBonuses = new ArrayList<>();
-
     @Schema(description = "총 점수", example = "100")
     private final int totalPoint;
 
@@ -57,9 +53,8 @@ public class SingleRegisterResponseDto {
         this.body = register.getBody();
         this.teamName = register.getUser().getTeam().getTeamName();
         this.missionName = register.getMission().getName();
-        this.missionCategory = register.getMission().getCategory().name();
+        this.missionCategory = register.getMission().getCategory().getName();
         this.missionPoint = register.getMission().getPoint();
-        this.missionBonuses = MissionBonusResponseDto.listOf(register.getMission().getBonusList());
         this.totalPoint = register.getTotalScore();
         this.status = register.getStatus();
         this.createAt = register.getCreatedAt();

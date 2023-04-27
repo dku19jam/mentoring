@@ -80,7 +80,7 @@ public class RegisterController {
     }
 
     @Operation(summary = "등록 글 승인", responses = {@ApiResponse(responseCode = "200", description = "등록 글 승인 성공")})
-    @PatchMapping("/{registerId}/approve")
+    @PutMapping("/{registerId}/approve")
     public String approveRegister(@PathVariable Long registerId, HttpServletRequest request, @Valid @RequestBody AdminApproveRequestDto dto ) {
 
         registerService.approveRegister(registerId, request, dto);

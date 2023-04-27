@@ -26,9 +26,9 @@ public class TeamSpecResponseDto {
     private final int score;
 
     @Schema(description = "완료한 미션", example = "미션1")
-    private List<String> completedMission = new ArrayList<>();
+    private List<CompletedMissionResponseDto> completedMission = new ArrayList<>();
 
-    public TeamSpecResponseDto(Team team, List<String> missions) {
+    public TeamSpecResponseDto(Team team, List<CompletedMissionResponseDto> missions) {
         this.id = team.getId();
         this.userName_mentor = team.getUser().getName();
         this.teamName = team.getTeamName();
