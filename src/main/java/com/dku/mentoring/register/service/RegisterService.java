@@ -9,6 +9,7 @@ import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
+import com.dku.mentoring.register.model.dto.request.AdminApproveRequestDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.model.dto.response.SingleRegisterResponseDto;
 import com.dku.mentoring.register.model.entity.Register;
@@ -145,13 +146,13 @@ public class RegisterService {
      * @param registerId 승인할 글 id
      */
     @Transactional
-    public void approveRegister(Long registerId, HttpServletRequest request) {
+    public void approveRegister(Long registerId, HttpServletRequest request, AdminApproveRequestDto dto) {
         Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
         User user = getMemberFromRequest(request);
         if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN"))) {
             throw new IllegalArgumentException("해당 권한이 없습니다.");
         }
-        register.approve();
+        register.approve(dto.getAdminBonusPoint());
     }
 
     /**

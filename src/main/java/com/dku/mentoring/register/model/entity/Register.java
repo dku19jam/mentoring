@@ -3,6 +3,7 @@ package com.dku.mentoring.register.model.entity;
 import com.dku.mentoring.global.base.BaseEntity;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
+import com.dku.mentoring.register.model.dto.request.AdminApproveRequestDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.user.entity.User;
 import lombok.Builder;
@@ -61,13 +62,15 @@ public class Register extends BaseEntity {
         this.files = registerFiles;
     }
 
-    public void approve() {
+    public void approve(int adminBonusPoint) {
         this.status = RegisterStatus.COMPLETE;
         if(this.getMission().getBonusList() != null){
             for(MissionBonus missionBonus : this.getMission().getBonusList()) {
                 this.getUser().getTeam().addScore(missionBonus.getPlusPoint());
             }
         }
+        if(adminBonusPoint != 0)
+            this.getUser().getTeam().addScore(adminBonusPoint);
         this.getUser().getTeam().addScore(mission.getPoint());
 
     }

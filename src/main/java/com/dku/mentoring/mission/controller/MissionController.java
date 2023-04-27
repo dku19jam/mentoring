@@ -1,5 +1,6 @@
 package com.dku.mentoring.mission.controller;
 
+import com.dku.mentoring.mission.model.dto.request.BonusMissionCreateRequestDto;
 import com.dku.mentoring.mission.model.dto.request.MissionCreateRequestDto;
 import com.dku.mentoring.mission.model.dto.response.*;
 import com.dku.mentoring.mission.service.MissionService;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -49,8 +51,8 @@ public class MissionController {
 
     @Operation(summary = "미션 등록", description = "미션 등록")
     @PostMapping("/create")
-    public ResponseEntity<Long> createMission(@RequestBody MissionCreateRequestDto dto) {
-        Long missionId = missionService.createMission(dto);
+    public ResponseEntity<Long> createMission(@RequestBody MissionCreateRequestDto dto, HttpServletRequest request) {
+        Long missionId = missionService.createMission(dto, request);
         return ResponseEntity.ok().body(missionId);
     }
 
@@ -60,7 +62,6 @@ public class MissionController {
         return missionService.getInfo();
     }
 
-    //TODO 아직 구현 중
     @Operation(summary = "미션 난이도별 조회", description = "미션 난이도별 조회")
     @GetMapping("/difficulty/{infoId}")
     public MissionResponsePage<MissionResponseDto> getMissionByInfo(@PathVariable String infoId,
@@ -71,4 +72,10 @@ public class MissionController {
         return missions;
     }
 
+    @Operation(summary = "추가 미션 등록", description = "추가 미션 등록")
+    @PostMapping("/create/bonus")
+    public ResponseEntity<Long> createBonusMission(@RequestBody BonusMissionCreateRequestDto dto, HttpServletRequest request) {
+        Long bonusMissionId = missionService.createBonusMission(dto, request);
+        return ResponseEntity.ok().body(bonusMissionId);
+    }
 }
