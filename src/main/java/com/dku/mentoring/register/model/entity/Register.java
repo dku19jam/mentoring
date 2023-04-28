@@ -2,7 +2,6 @@ package com.dku.mentoring.register.model.entity;
 
 import com.dku.mentoring.global.base.BaseEntity;
 import com.dku.mentoring.mission.model.entity.Mission;
-import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.user.entity.User;
 import lombok.Builder;
@@ -37,6 +36,8 @@ public class Register extends BaseEntity {
     @JoinColumn(name = "mission_id")
     private Mission mission;
 
+    private int totalScore;
+
     @Enumerated(EnumType.STRING)
     private RegisterStatus status;
 
@@ -44,11 +45,12 @@ public class Register extends BaseEntity {
     private List<RegisterFile> files = new ArrayList<>();
 
     @Builder
-    public Register(User user, String title, String body, Mission mission) {
+    public Register(User user, String title, String body, Mission mission, int totalScore) {
         this.user = user;
         this.title = title;
         this.body = body;
         this.mission = mission;
+        this.totalScore = totalScore;
         this.status = RegisterStatus.PROGRESS;
     }
 
@@ -61,24 +63,17 @@ public class Register extends BaseEntity {
         this.files = registerFiles;
     }
 
-    public void approve() {
+    public void approve(int adminBonusPoint) {
         this.status = RegisterStatus.COMPLETE;
-        if(this.getMission().getBonusList() != null){
-            for(MissionBonus missionBonus : this.getMission().getBonusList()) {
-                this.getUser().getTeam().addScore(missionBonus.getPlusPoint());
-            }
-        }
+        if(adminBonusPoint != 0)
+            this.getUser().getTeam().addScore(adminBonusPoint);
         this.getUser().getTeam().addScore(mission.getPoint());
-
+        this.totalScore = this.getTotalPoint() + adminBonusPoint;
     }
 
-    public int getTotalScore() {
-        if(mission.getBonusList().isEmpty()) {
-            return mission.getPoint();
-        } else
-            return mission.getPoint() + mission.getBonusList().stream().mapToInt(MissionBonus::getPlusPoint).sum();
+    public int getTotalPoint() {
+        return mission.getPoint();
     }
-
 
     public void setMission(Mission mission) {
         this.mission = mission;

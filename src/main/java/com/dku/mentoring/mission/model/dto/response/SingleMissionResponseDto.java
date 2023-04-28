@@ -16,21 +16,21 @@ public class SingleMissionResponseDto {
 
     private final String description;
 
-    private final MissionInfo info;
+    private final String info;
 
     private List<MissionBonusResponseDto> bonusList = new ArrayList<>();
 
     private final int point;
 
-    private final Category category;
+    private final String category;
 
     public SingleMissionResponseDto(Mission mission) {
         this.id = mission.getId();
         this.name = mission.getName();
         this.description = mission.getDescription();
-        this.info = mission.getInfo();
+        this.info = mission.getInfo().getName();
         this.bonusList = MissionBonusResponseDto.listOf(mission.getBonusList());
         this.point = mission.getPoint();
-        this.category = mission.getCategory();
+        this.category = mission.getCategory().getName();
     }
 }

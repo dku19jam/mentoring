@@ -13,6 +13,8 @@ public class SummarizedTeamDto {
 
     private final String userName_mentor;
 
+    private final String mentee;
+
     private final int score;
 
     @Builder
@@ -20,6 +22,7 @@ public class SummarizedTeamDto {
         this.id = team.getId();
         this.teamName = team.getTeamName();
         this.userName_mentor = team.getUser().getName();
+        this.mentee = team.getMentee();
         this.score = team.getScore();
     }
 }
