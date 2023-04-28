@@ -3,9 +3,10 @@ package com.dku.mentoring.mission.model.entity;
 public enum MissionInfo {
     VERY_EASY("최하"),
     EASY("하"),
-    NORMAL("중"),
-    HARD("중상"),
-    VERY_HARD("상");
+    MEDIUM("중"),
+    MEDIUM_HARD("중상"),
+    HARD("상"),
+    VERY_HARD("최상");
 
     private final String name;
 

@@ -61,4 +61,9 @@ public class Mission extends BaseEntity {
         this.registers.add(register);
         register.setMission(this);
     }
+
+    public void addBonus(MissionBonus missionBonus) {
+        this.bonusList.add(missionBonus);
+        missionBonus.setMission(this);
+    }
 }

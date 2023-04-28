@@ -5,6 +5,7 @@ import com.dku.mentoring.global.base.dto.response.ResponsePage;
 import com.dku.mentoring.global.base.dto.request.ResponseIdDto;
 import com.dku.mentoring.register.exception.RegisterFileNotfoundException;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
+import com.dku.mentoring.register.model.dto.request.AdminApproveRequestDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.model.dto.response.SingleRegisterResponseDto;
 import com.dku.mentoring.register.model.entity.RegisterFile;
@@ -64,7 +65,7 @@ public class RegisterController {
     }
 
     @Operation(summary = "등록 글 수정", responses = {@ApiResponse(responseCode = "200", description = "등록 글 수정 성공")})
-    @PutMapping("/{registerId}")
+    @PatchMapping("/{registerId}")
     public ResponseIdDto updateRegister(@PathVariable Long registerId, HttpServletRequest request, @Valid @RequestBody RegisterRequestDto registerRequestDto) {
         Long updatedRegisterId = registerService.updateRegister(registerId, request, registerRequestDto);
         return new ResponseIdDto(updatedRegisterId);
@@ -80,9 +81,9 @@ public class RegisterController {
 
     @Operation(summary = "등록 글 승인", responses = {@ApiResponse(responseCode = "200", description = "등록 글 승인 성공")})
     @PutMapping("/{registerId}/approve")
-    public String approveRegister(@PathVariable Long registerId, HttpServletRequest request) {
+    public String approveRegister(@PathVariable Long registerId, HttpServletRequest request, @Valid @RequestBody AdminApproveRequestDto dto ) {
 
-        registerService.approveRegister(registerId, request);
+        registerService.approveRegister(registerId, request, dto);
         return "승인 성공";
     }
 

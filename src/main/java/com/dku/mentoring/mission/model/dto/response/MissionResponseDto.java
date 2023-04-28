@@ -20,7 +20,6 @@ public class MissionResponseDto {
     private String description;
     private int point;
     private String  category;
-    private List<MissionBonusResponseDto> bonusList;
     private String info;
 
     @Builder
@@ -30,7 +29,6 @@ public class MissionResponseDto {
         this.description = mission.getDescription();
         this.point = mission.getPoint();
         this.category = mission.getCategory().getName();
-        this.bonusList = MissionBonusResponseDto.listOf(mission.getBonusList());
         this.info = mission.getInfo().getName();
     }
 }

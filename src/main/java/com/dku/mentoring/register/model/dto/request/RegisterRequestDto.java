@@ -30,16 +30,13 @@ public class RegisterRequestDto {
 
     private List<MultipartFile> files = new ArrayList<>();
 
-    @Schema(description = "추가 미션 리스트")
-    private List<MissionBonusRequestDto> missionList = new ArrayList<>();
-
-
 
     public Register toEntity(User user, Mission mission) {
         return Register.builder()
                 .user(user)
                 .title(title)
                 .body(body)
+                .totalScore(mission.getPoint())
                 .mission(mission)
                 .build();
     }

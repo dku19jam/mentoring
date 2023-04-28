@@ -2,6 +2,7 @@ package com.dku.mentoring.team.service;
 
 import com.dku.mentoring.register.model.entity.RegisterStatus;
 import com.dku.mentoring.team.exception.TeamNotFoundException;
+import com.dku.mentoring.team.model.dto.reponse.CompletedMissionResponseDto;
 import com.dku.mentoring.team.model.entity.Team;
 import com.dku.mentoring.team.model.dto.list.SummarizedTeamDto;
 import com.dku.mentoring.team.model.dto.reponse.TeamSpecResponseDto;
@@ -45,10 +46,14 @@ public class TeamService {
      */
     public TeamSpecResponseDto getTeam(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("해당 팀이 없습니다."));
-        List<String> missions = team.getUser().getRegisters().stream()
+//        List<CompletedMissionReponseDto> missions = team.getUser().getRegisters().stream()
+//                .filter(register -> register.getStatus().equals(RegisterStatus.COMPLETE))
+//                .map(register -> register.getMission().getDescription())
+//                .collect(Collectors.toList());
+        List<CompletedMissionResponseDto> completedMissions = team.getUser().getRegisters().stream()
                 .filter(register -> register.getStatus().equals(RegisterStatus.COMPLETE))
-                .map(register -> register.getMission().getDescription())
-                .collect(Collectors.toList());
-        return new TeamSpecResponseDto(team, missions);
+                .map(CompletedMissionResponseDto::new).collect(Collectors.toList());
+
+        return new TeamSpecResponseDto(team, completedMissions);
     }
 }

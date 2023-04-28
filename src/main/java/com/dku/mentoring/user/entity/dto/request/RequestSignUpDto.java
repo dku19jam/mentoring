@@ -23,7 +23,11 @@ public class RequestSignUpDto {
     @Schema(description = "이름", example = "홍길동")
     private final String name;
 
+    @Schema(description = "팀 이름", example = "팀1")
     private final String teamName;
+
+    @Schema(description = "멘티 이름", example = "멘티1, 멘티2, 멘티3")
+    private final String menteeName;
 
     @NotBlank
     @Size(min = 3, max = 200)
