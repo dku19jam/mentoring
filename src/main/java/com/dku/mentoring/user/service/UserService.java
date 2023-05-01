@@ -46,6 +46,7 @@ public class UserService {
         Team team = Team.builder()
                 .user(user)
                 .teamName(dto.getTeamName())
+                .mentee(dto.getMenteeName())
                 .build();
         user.setTeam(team);
 
