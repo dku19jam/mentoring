@@ -8,6 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class SingleRegisterResponseDto {
@@ -47,6 +48,8 @@ public class SingleRegisterResponseDto {
     @Schema(description = "수정 일시", example = "2021-01-01T00:00:00")
     private final LocalDateTime lastModifiedAt;
 
+    private final List<Long> registerFiles;
+
     public SingleRegisterResponseDto(Register register) {
         this.id = register.getId();
         this.title = register.getTitle();
@@ -59,5 +62,7 @@ public class SingleRegisterResponseDto {
         this.status = register.getStatus();
         this.createAt = register.getCreatedAt();
         this.lastModifiedAt = register.getLastModifiedAt();
+        this.registerFiles = register.getFiles().stream()
+                .map(registerFile -> registerFile.getId()).collect(Collectors.toList());
     }
 }
