@@ -1,11 +1,14 @@
 package com.dku.mentoring.register.model.dto.list;
 
 import com.dku.mentoring.register.model.entity.Register;
+import com.dku.mentoring.register.model.entity.RegisterFile;
 import com.dku.mentoring.register.model.entity.RegisterStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -32,6 +35,8 @@ public class SummarizedRegisterDto {
     @Schema(description = "등록 날짜", example = "2021-01-01")
     private final LocalDateTime date;
 
+    private final List<Long> registerFiles;
+
 
     public SummarizedRegisterDto(Register register) {
         this.id = register.getId();
@@ -41,5 +46,7 @@ public class SummarizedRegisterDto {
         this.status = register.getStatus();
         this.totalScore = register.getTotalScore();
         this.date = register.getLastModifiedAt();
+        this.registerFiles = register.getFiles().stream()
+                .map(RegisterFile::getId).collect(Collectors.toList());
     }
 }
