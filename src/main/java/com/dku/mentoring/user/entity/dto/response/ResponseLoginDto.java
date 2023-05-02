@@ -30,6 +30,9 @@ public class ResponseLoginDto {
     @Schema(description = "팀 이름")
     private final String teamName;
 
+    @Schema(description = "권한")
+    private String role;
+
     public ResponseLoginDto(User user) {
         this.studentId = user.getStudentId();
         this.name = user.getName();

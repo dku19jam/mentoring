@@ -30,7 +30,7 @@ public class RequestSignUpDto {
     private final String menteeName;
 
     @NotBlank
-    @Size(min = 3, max = 200)
-    @Schema(description = "비밀번호", example = "123")
+    @Size(min = 6, max = 200)
+    @Schema(description = "비밀번호", example = "123456")
     private final String password;
 }
