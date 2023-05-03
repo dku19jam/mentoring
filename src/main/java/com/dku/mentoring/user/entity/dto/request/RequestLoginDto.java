@@ -10,8 +10,6 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @RequiredArgsConstructor
-@NoArgsConstructor(force = true)
-@JsonPropertyOrder({"studentId", "password"})
 public class RequestLoginDto {
 
     @NotBlank

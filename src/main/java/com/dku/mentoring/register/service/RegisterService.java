@@ -55,20 +55,8 @@ public class RegisterService {
                 throw new MissionAlreadyInProgress("이미 등록한 미션입니다.");
             }
         }
-        //TODO 추가 미션 인증을 체크 박스로 인증하고 싶음
+
         Register register = dto.toEntity(user, mission);
-
-
-//        List<MissionBonus> bonusList = missionBonusRepository.findAllByMissionId(missionId);
-//        if(bonusList != null) {
-//            for (MissionBonusRequestDto missionBonusRequestDto : missionList) {
-//                for (MissionBonus missionBonus : bonusList) {
-//                    if (missionBonusRequestDto.getPlusMission().equals(missionBonus.getPlusMission())) {
-//                        register.getMission().addRegister(register);
-//                    }
-//                }
-//            }
-//        }
 
         Register savedPost = registerRepository.save(register);
 
