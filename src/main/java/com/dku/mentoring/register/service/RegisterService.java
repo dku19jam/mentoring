@@ -8,6 +8,8 @@ import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
+import com.dku.mentoring.register.exception.NoRightToAccessException;
+import com.dku.mentoring.register.exception.RegisterNotfoundException;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.AdminApproveRequestDto;
 import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
@@ -16,6 +18,7 @@ import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.register.model.entity.RegisterFile;
 import com.dku.mentoring.register.repository.RegisterRepository;
 import com.dku.mentoring.user.entity.User;
+import com.dku.mentoring.user.exception.UserNotFoundException;
 import com.dku.mentoring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -80,7 +83,7 @@ public class RegisterService {
      * @param registerId 조회할 글 id
      */
     public SingleRegisterResponseDto findOne(Long registerId) {
-        Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Register register = registerRepository.findById(registerId).orElseThrow(() -> new RegisterNotfoundException("해당 글이 없습니다."));
         return new SingleRegisterResponseDto(register);
     }
 
@@ -115,10 +118,10 @@ public class RegisterService {
      */
     @Transactional
     public Long updateRegister(Long registerId, HttpServletRequest request, RegisterRequestDto dto) {
-        Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Register register = registerRepository.findById(registerId).orElseThrow(() -> new RegisterNotfoundException("해당 글이 없습니다."));
         User user = getMemberFromRequest(request);
         if(!register.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new NoRightToAccessException("해당 권한이 없습니다.");
         }
         register.update(dto);
         return register.getId();
@@ -132,9 +135,9 @@ public class RegisterService {
     @Transactional
     public void deleteRegister(Long registerId, HttpServletRequest request) {
         User user = getMemberFromRequest(request);
-        Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Register register = registerRepository.findById(registerId).orElseThrow(() -> new RegisterNotfoundException("해당 글이 없습니다."));
         if(!register.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new NoRightToAccessException("해당 권한이 없습니다.");
         }
         registerRepository.delete(register);
     }
@@ -146,10 +149,10 @@ public class RegisterService {
      */
     @Transactional
     public void approveRegister(Long registerId, HttpServletRequest request, AdminApproveRequestDto dto) {
-        Register register = registerRepository.findById(registerId).orElseThrow(() -> new IllegalArgumentException("해당 글이 없습니다."));
+        Register register = registerRepository.findById(registerId).orElseThrow(() -> new RegisterNotfoundException("해당 글이 없습니다."));
         User user = getMemberFromRequest(request);
         if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN"))) {
-            throw new IllegalArgumentException("해당 권한이 없습니다.");
+            throw new NoRightToAccessException("해당 권한이 없습니다.");
         }
         register.approve(dto.getAdminBonusPoint());
     }
@@ -162,7 +165,7 @@ public class RegisterService {
     public User getMemberFromRequest(HttpServletRequest request) {
         String token = jwtProvider.resolveToken(request);
         String studentId = jwtProvider.getStudentId(token);
-        User user = userRepository.findByStudentId(studentId).orElseThrow(IllegalAccessError::new);
+        User user = userRepository.findByStudentId(studentId).orElseThrow(UserNotFoundException::new);
 
         return user;
     }
