@@ -26,6 +26,7 @@ public class UserRole implements Serializable
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
     private String rolename;
 
     public void setUser(User user) {

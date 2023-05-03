@@ -4,11 +4,13 @@ import com.dku.mentoring.global.auth.JwtProvider;
 import com.dku.mentoring.team.model.entity.Team;
 import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.entity.UserRole;
+import com.dku.mentoring.user.entity.dto.request.RequestChangePasswordDto;
 import com.dku.mentoring.user.entity.dto.request.RequestLoginDto;
 import com.dku.mentoring.user.entity.dto.request.RequestSignUpDto;
 import com.dku.mentoring.user.entity.dto.response.ResponseLoginDto;
 import com.dku.mentoring.user.exception.UserNotFoundException;
 import com.dku.mentoring.user.repository.UserRepository;
+import com.dku.mentoring.user.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,6 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final UserRoleRepository roleRepository;
 
     @Transactional
     public Long signUp(RequestSignUpDto dto) {
@@ -61,13 +65,49 @@ public class UserService {
         if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             throw new UserNotFoundException("비밀번호가 일치하지 않습니다.");
         }
+        UserRole role = roleRepository.findByUserId(user.getId()).orElseThrow(() ->
+                new UserNotFoundException("권한이 존재하지 않습니다."));
+
         return ResponseLoginDto.builder()
                 .accessToken(jwtProvider.createAccessToken(user.getStudentId(), getRole(user)))
                 .refreshToken(jwtProvider.createRefreshToken(user.getStudentId()))
                 .studentId(user.getStudentId())
                 .name(user.getName())
                 .teamName(user.getTeam().getTeamName())
+                .role(role.getRolename())
                 .build();
+    }
+
+    @Transactional
+    public void changePassword(RequestChangePasswordDto dto, HttpServletRequest request){
+        String token = jwtProvider.resolveToken(request);
+        String studentId = jwtProvider.getStudentId(token);
+        User user = userRepository.findByStudentId(studentId).orElseThrow(IllegalAccessError::new);
+
+        checkPresentPassword(user, dto.getPresentPassword());
+        checkSamePassword(user.getPassword(), dto.getNewPassword());
+        checkConfirmPassword(dto.getNewPassword(), dto.getNewPasswordConfirm());
+
+        String newPassword = passwordEncoder.encode(dto.getNewPassword());
+        user.changePassword(newPassword);
+    }
+
+    private void checkPresentPassword(User user, String presentPassword) {
+        if(!passwordEncoder.matches(presentPassword, user.getPassword())){
+            throw new IllegalArgumentException("현재 비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+    private void checkSamePassword(String presentPassword, String newPassword) {
+        if(passwordEncoder.matches(newPassword, presentPassword)){
+            throw new IllegalArgumentException("현재 비밀번호와 새로운 비밀번호가 일치합니다.");
+        }
+    }
+
+    private void checkConfirmPassword(String newPassword, String newPasswordConfirm) {
+        if(!newPassword.equals(newPasswordConfirm)){
+            throw new IllegalArgumentException("새로운 비밀번호가 일치하지 않습니다.");
+        }
     }
 
     private List<String> getRole(User user) {
@@ -78,5 +118,20 @@ public class UserService {
         }
 
         return role;
+    }
+
+    @Transactional
+    public void resetPassword(String studentId, HttpServletRequest request) {
+        String token = jwtProvider.resolveToken(request);
+        String AdminStudentId = jwtProvider.getStudentId(token);
+        User admin = userRepository.findByStudentId(AdminStudentId).orElseThrow(IllegalAccessError::new);
+
+        if(admin.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN"))) {
+            throw new IllegalArgumentException("관리자가 아니라 권한이 없습니다.");
+        }
+
+        User user = userRepository.findByStudentId(studentId).orElseThrow(UserNotFoundException::new);
+        //TODO user가 관리자라면 예외처리를 해야하나?
+        user.changePassword(passwordEncoder.encode("12345678!"));
     }
 }

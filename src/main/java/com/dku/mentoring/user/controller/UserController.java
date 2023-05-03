@@ -1,16 +1,18 @@
 package com.dku.mentoring.user.controller;
 
+import com.dku.mentoring.user.entity.dto.request.RequestChangePasswordDto;
 import com.dku.mentoring.user.entity.dto.request.RequestLoginDto;
+import com.dku.mentoring.user.entity.dto.request.RequestResetPasswordDto;
 import com.dku.mentoring.user.entity.dto.request.RequestSignUpDto;
 import com.dku.mentoring.user.entity.dto.response.ResponseLoginDto;
 import com.dku.mentoring.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +30,21 @@ public class UserController {
 
     @Operation(summary = "로그인", description = "로그인을 합니다.")
     @PostMapping("/login")
-    public ResponseLoginDto login(@RequestBody RequestLoginDto dto) {
+    public ResponseLoginDto login(@Valid @RequestBody RequestLoginDto dto) {
         return userService.login(dto);
+    }
+
+    @Operation(summary = "비밀번호 변경", description = "비밀번호를 변경합니다.")
+    @PutMapping("/change/password")
+    public String changePassword(@Valid @RequestBody RequestChangePasswordDto dto, HttpServletRequest request) {
+        userService.changePassword(dto, request);
+        return "비밀번호 변경 완료";
+    }
+
+    @Operation(summary = "비밀번호 초기화(관리자)", description = "비밀번호를 초기화합니다.")
+    @PutMapping("/reset/password")
+    public String resetPassword(@RequestBody RequestResetPasswordDto dto, HttpServletRequest request) {
+        userService.resetPassword(dto.getStudentId(), request);
+        return "비밀번호 초기화 완료";
     }
 }

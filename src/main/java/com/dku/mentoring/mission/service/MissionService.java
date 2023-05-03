@@ -9,6 +9,7 @@ import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.mission.model.entity.MissionInfo;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
+import com.dku.mentoring.register.exception.NoRightToAccessException;
 import com.dku.mentoring.register.service.RegisterService;
 import com.dku.mentoring.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -73,7 +74,7 @@ public class MissionService {
     public Long createMission(MissionCreateRequestDto dto, HttpServletRequest request) {
         User user = registerService.getMemberFromRequest(request);
         if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN")))
-            throw new IllegalArgumentException("관리자만 미션을 생성할 수 있습니다.");
+            throw new NoRightToAccessException("관리자만 미션을 생성할 수 있습니다.");
 
         Mission newMission = dto.toEntity();
 
@@ -90,7 +91,7 @@ public class MissionService {
     public Long createBonusMission(BonusMissionCreateRequestDto dto, HttpServletRequest request) {
         User user = registerService.getMemberFromRequest(request);
         if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN")))
-            throw new IllegalArgumentException("관리자만 추가 미션을 생성할 수 있습니다.");
+            throw new NoRightToAccessException("관리자만 추가 미션을 생성할 수 있습니다.");
 
         Mission mission = missionRepository.findById(dto.getMissionId()).orElseThrow(() -> new MissionNotFoundException("해당 미션이 없습니다."));
         MissionBonus newBonusMission = dto.toEntity();

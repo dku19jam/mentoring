@@ -28,7 +28,7 @@ public class User {
     @NotNull
     @Column(unique = true)
     private String studentId;
-
+    
     private String password;
 
     private String name;
@@ -58,5 +58,9 @@ public class User {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public void changePassword(String encodedNewPassword) {
+        this.password = encodedNewPassword;
     }
 }
