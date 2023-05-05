@@ -28,7 +28,7 @@ public class Mission extends BaseEntity {
     private String description;
 
     @Enumerated(STRING)
-    private MissionInfo info;
+    private MissionDifficulty difficulty;
 
     @OneToMany(mappedBy = "mission", cascade = ALL, orphanRemoval = true)
     private List<MissionBonus> bonusList = new ArrayList<>();
@@ -38,22 +38,17 @@ public class Mission extends BaseEntity {
     @Enumerated(STRING)
     private Category category;
 
-    /*
-    - TODO 1. 미션 난이도별 API 구현 → 중 , 중상 , 상 은 타과 연합 가능 → 기능 구현할 때 boolean으로 확인해야 할듯?
-     */
-
     @OneToMany(mappedBy = "mission", cascade = ALL, orphanRemoval = true)
     private List<Register> registers = new ArrayList<>();
 
-
     @Builder
-    public Mission(Long id, String name, String description, int point, Category category, MissionInfo info, List<MissionBonus> missionBonusList) {
+    public Mission(Long id, String name, String description, int point, Category category, MissionDifficulty difficulty, List<MissionBonus> missionBonusList) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.point = point;
         this.category = category;
-        this.info = info;
+        this.difficulty = difficulty;
         this.bonusList = missionBonusList;
     }
 

@@ -1,8 +1,6 @@
 package com.dku.mentoring.mission.model.dto.response;
 
-import com.dku.mentoring.mission.model.entity.Category;
 import com.dku.mentoring.mission.model.entity.Mission;
-import com.dku.mentoring.mission.model.entity.MissionInfo;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ public class SingleMissionResponseDto {
 
     private final String description;
 
-    private final String info;
+    private final String difficulty;
 
     private List<MissionBonusResponseDto> bonusList = new ArrayList<>();
 
@@ -28,7 +26,7 @@ public class SingleMissionResponseDto {
         this.id = mission.getId();
         this.name = mission.getName();
         this.description = mission.getDescription();
-        this.info = mission.getInfo().getName();
+        this.difficulty = mission.getDifficulty().getName();
         this.bonusList = MissionBonusResponseDto.listOf(mission.getBonusList());
         this.point = mission.getPoint();
         this.category = mission.getCategory().getName();

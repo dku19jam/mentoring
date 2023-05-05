@@ -6,7 +6,6 @@ import com.dku.mentoring.mission.model.dto.response.*;
 import com.dku.mentoring.mission.service.MissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +42,7 @@ public class MissionController {
         return mission;
     }
 
-        @Operation(summary = "미션 상세 조회", responses = {@ApiResponse(responseCode = "200", description = "미션 상세 조회 성공")})
+    @Operation(summary = "미션 상세 조회", responses = {@ApiResponse(responseCode = "200", description = "미션 상세 조회 성공")})
     @GetMapping("/{missionId}")
     public SingleMissionResponseDto getMission(@PathVariable Long missionId) {
         return missionService.getMission(missionId);
@@ -59,16 +58,16 @@ public class MissionController {
     @Operation(summary = "미션 난이도 조회", description = "미션 난이도 조회")
     @GetMapping("/difficulty")
     public List<ResponseDifficultyListDto> getDifficulty() {
-        return missionService.getInfo();
+        return missionService.getDifficulty();
     }
 
     @Operation(summary = "미션 난이도별 조회", description = "미션 난이도별 조회")
-    @GetMapping("/difficulty/{infoId}")
-    public MissionResponsePage<MissionResponseDto> getMissionByInfo(@PathVariable String infoId,
-                                                                    @RequestParam(defaultValue = "1") int page,
-                                                                    @RequestParam(defaultValue = "10") int size) {
+    @GetMapping("/difficulty/{difficultyId}")
+    public MissionResponsePage<MissionResponseDto> getMissionByDifficulty(@PathVariable String difficultyId,
+                                                                          @RequestParam(defaultValue = "1") int page,
+                                                                          @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        MissionResponsePage<MissionResponseDto> missions = missionService.getMissionsByInfoId(infoId, pageable);
+        MissionResponsePage<MissionResponseDto> missions = missionService.getMissionsByDifficultyId(difficultyId, pageable);
         return missions;
     }
 

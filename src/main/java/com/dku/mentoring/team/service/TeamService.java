@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,14 +48,12 @@ public class TeamService {
      */
     public TeamSpecResponseDto getTeam(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new TeamNotFoundException("해당 팀이 없습니다."));
-//        List<CompletedMissionReponseDto> missions = team.getUser().getRegisters().stream()
-//                .filter(register -> register.getStatus().equals(RegisterStatus.COMPLETE))
-//                .map(register -> register.getMission().getDescription())
-//                .collect(Collectors.toList());
+
         List<CompletedMissionResponseDto> completedMissions = team.getUser().getRegisters().stream()
                 .filter(register -> register.getStatus().equals(RegisterStatus.COMPLETE))
                 .map(CompletedMissionResponseDto::new).collect(Collectors.toList());
 
+        Collections.reverse(completedMissions);
         return new TeamSpecResponseDto(team, completedMissions);
     }
 }

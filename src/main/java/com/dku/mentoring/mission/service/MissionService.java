@@ -6,7 +6,7 @@ import com.dku.mentoring.mission.model.dto.request.MissionCreateRequestDto;
 import com.dku.mentoring.mission.model.dto.response.*;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
-import com.dku.mentoring.mission.model.entity.MissionInfo;
+import com.dku.mentoring.mission.model.entity.MissionDifficulty;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import com.dku.mentoring.register.exception.NoRightToAccessException;
@@ -107,9 +107,9 @@ public class MissionService {
      * <p>
      * 미션 등록 리스트에서 난이도를 선택해서 등록할 수 있게끔 하기 위해서 구현
      */
-    public List<ResponseDifficultyListDto> getInfo() {
-        List<MissionInfo> missionInfos = Arrays.asList(MissionInfo.values());
-        return missionInfos.stream()
+    public List<ResponseDifficultyListDto> getDifficulty() {
+        List<MissionDifficulty> missionDifficulties = Arrays.asList(MissionDifficulty.values());
+        return missionDifficulties.stream()
                 .map(ResponseDifficultyListDto::new)
                 .collect(Collectors.toList());
     }
@@ -117,11 +117,11 @@ public class MissionService {
     /**
      * 미션 난이도별 조회
      *
-     * @param infoId 난이도
+     * @param difficultyId 난이도
      */
-    public MissionResponsePage<MissionResponseDto> getMissionsByInfoId(String infoId, Pageable pageable) {
-        MissionInfo info = MissionInfo.valueOf(infoId);
-        Page<MissionResponseDto> missions = missionRepository.findByInfo(info, pageable).map(MissionResponseDto::new);
+    public MissionResponsePage<MissionResponseDto> getMissionsByDifficultyId(String difficultyId, Pageable pageable) {
+        MissionDifficulty difficulty = MissionDifficulty.valueOf(difficultyId);
+        Page<MissionResponseDto> missions = missionRepository.findByDifficulty(difficulty, pageable).map(MissionResponseDto::new);
         return new MissionResponsePage<>(missions);
     }
 }

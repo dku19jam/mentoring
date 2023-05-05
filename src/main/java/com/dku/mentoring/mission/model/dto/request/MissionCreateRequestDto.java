@@ -3,7 +3,7 @@ package com.dku.mentoring.mission.model.dto.request;
 import com.dku.mentoring.mission.model.entity.Category;
 import com.dku.mentoring.mission.model.entity.Mission;
 import com.dku.mentoring.mission.model.entity.MissionBonus;
-import com.dku.mentoring.mission.model.entity.MissionInfo;
+import com.dku.mentoring.mission.model.entity.MissionDifficulty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,14 +16,14 @@ public class MissionCreateRequestDto {
     private String description;
     private int point;
     private Category category;
-    private MissionInfo info;
+    private MissionDifficulty difficulty;
 
-    public MissionCreateRequestDto(String name, String description, int point, Category category, List<MissionBonus> bonusList, MissionInfo info) {
+    public MissionCreateRequestDto(String name, String description, int point, Category category, List<MissionBonus> bonusList, MissionDifficulty difficulty) {
         this.name = name;
         this.description = description;
         this.point = point;
         this.category = category;
-        this.info = info;
+        this.difficulty = difficulty;
     }
 
     public Mission toEntity() {
@@ -32,7 +32,7 @@ public class MissionCreateRequestDto {
                 .description(description)
                 .point(point)
                 .category(category)
-                .info(info)
+                .difficulty(difficulty)
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 package com.dku.mentoring.mission.model.entity;
 
-public enum MissionInfo {
+public enum MissionDifficulty {
     VERY_EASY("최하"),
     EASY("하"),
     MEDIUM("중"),
@@ -10,7 +10,7 @@ public enum MissionInfo {
 
     private final String name;
 
-    MissionInfo(String name) {
+    MissionDifficulty(String name) {
         this.name = name;
     }
 

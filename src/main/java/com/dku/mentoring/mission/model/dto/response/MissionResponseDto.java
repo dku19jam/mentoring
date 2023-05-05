@@ -1,15 +1,10 @@
 package com.dku.mentoring.mission.model.dto.response;
 
-import com.dku.mentoring.mission.model.entity.Category;
 import com.dku.mentoring.mission.model.entity.Mission;
-import com.dku.mentoring.mission.model.entity.MissionBonus;
-import com.dku.mentoring.mission.model.entity.MissionInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -20,7 +15,7 @@ public class MissionResponseDto {
     private String description;
     private int point;
     private String  category;
-    private String info;
+    private String difficulty;
 
     @Builder
     public MissionResponseDto(Mission mission) {
@@ -29,6 +24,6 @@ public class MissionResponseDto {
         this.description = mission.getDescription();
         this.point = mission.getPoint();
         this.category = mission.getCategory().getName();
-        this.info = mission.getInfo().getName();
+        this.difficulty = mission.getDifficulty().getName();
     }
 }
