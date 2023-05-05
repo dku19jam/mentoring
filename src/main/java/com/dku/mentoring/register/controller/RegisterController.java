@@ -80,7 +80,7 @@ public class RegisterController {
     }
 
     @Operation(summary = "등록 글 승인", responses = {@ApiResponse(responseCode = "200", description = "등록 글 승인 성공")})
-    @PutMapping("/{registerId}/approve")
+    @PatchMapping("/{registerId}/approve")
     public String approveRegister(@PathVariable Long registerId, HttpServletRequest request, @Valid @RequestBody AdminApproveRequestDto dto ) {
 
         registerService.approveRegister(registerId, request, dto);
@@ -99,7 +99,7 @@ public class RegisterController {
 
     @Operation(summary = "미션 인증 사진 조회", description = "미션 인증 사진 조회")
     @GetMapping(value = "/image/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> getRegsiterImage(@PathVariable Long imageId) {
+    public ResponseEntity<byte[]> getRegisterImage(@PathVariable Long imageId) {
         RegisterFile registerFile = registerFileRepository.findById(imageId).orElseThrow(RegisterFileNotfoundException::new);
 
         return ResponseEntity.ok()
