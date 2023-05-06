@@ -74,7 +74,6 @@ public class UserService {
                 .studentId(user.getStudentId())
                 .name(user.getName())
                 .teamName(user.getTeam().getTeamName())
-                .role(role.getRolename())
                 .build();
     }
 
