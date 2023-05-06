@@ -1,6 +1,7 @@
 package com.dku.mentoring.register.model.dto.response;
 
 import com.dku.mentoring.register.model.entity.Register;
+import com.dku.mentoring.register.model.entity.RegisterFile;
 import com.dku.mentoring.register.model.entity.RegisterStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -63,6 +64,6 @@ public class SingleRegisterResponseDto {
         this.createAt = register.getCreatedAt();
         this.lastModifiedAt = register.getLastModifiedAt();
         this.registerFiles = register.getFiles().stream()
-                .map(registerFile -> registerFile.getId()).collect(Collectors.toList());
+                .map(RegisterFile::getId).collect(Collectors.toList());
     }
 }

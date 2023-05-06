@@ -9,6 +9,7 @@ import com.dku.mentoring.mission.model.entity.MissionBonus;
 import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import com.dku.mentoring.register.exception.NoRightToAccessException;
+import com.dku.mentoring.register.exception.RegisterAlreadyCompleteException;
 import com.dku.mentoring.register.exception.RegisterNotfoundException;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.AdminApproveRequestDto;
@@ -16,12 +17,14 @@ import com.dku.mentoring.register.model.dto.request.RegisterRequestDto;
 import com.dku.mentoring.register.model.dto.response.SingleRegisterResponseDto;
 import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.register.model.entity.RegisterFile;
+import com.dku.mentoring.register.model.entity.RegisterStatus;
 import com.dku.mentoring.register.repository.RegisterRepository;
 import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.exception.UserNotFoundException;
 import com.dku.mentoring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,6 +86,7 @@ public class RegisterService {
      * @return 페이징된 목록
      */
     public Page<SummarizedRegisterDto> getRegisters(Pageable pageable) {
+        pageable = makeToDesc(pageable);
         Page<Register> registers = registerRepository.findAllRegisters(pageable);
         return registers.map(SummarizedRegisterDto::new);
     }
@@ -94,6 +98,8 @@ public class RegisterService {
     public Page<SummarizedRegisterDto> getRegistersByUser(HttpServletRequest request, Pageable pageable) {
         User user = getMemberFromRequest(request);
         Long userId = user.getId();
+
+        pageable = makeToDesc(pageable);
 
         Page<Register> registers = registerRepository.findByUserId(userId, pageable);
         return registers.map(SummarizedRegisterDto::new);
@@ -127,6 +133,9 @@ public class RegisterService {
         if(!register.getUser().getId().equals(user.getId())) {
             throw new NoRightToAccessException("해당 권한이 없습니다.");
         }
+        if(register.getStatus().equals(RegisterStatus.COMPLETE)){
+            throw new RegisterAlreadyCompleteException("이미 완료된 글입니다.");
+        }
         registerRepository.delete(register);
     }
 
@@ -156,5 +165,12 @@ public class RegisterService {
         User user = userRepository.findByStudentId(studentId).orElseThrow(UserNotFoundException::new);
 
         return user;
+    }
+
+    /**
+     * 페이징 방법을 내림차순으로 변경
+     */
+    private static PageRequest makeToDesc(Pageable pageable) {
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().descending());
     }
 }

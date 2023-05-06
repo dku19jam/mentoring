@@ -13,4 +13,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query("select t from Team t where t.teamName != '관리자팀' order by t.score desc ")
     Page<Team> findAllDesc(Pageable pageable);
     Optional<Team> findById(Long id);
+
+    Optional<Team> findByTeamName(String teamName);
 }
