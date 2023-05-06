@@ -35,14 +35,14 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 변경", description = "비밀번호를 변경합니다.")
-    @PutMapping("/change/password")
+    @PatchMapping("/change/password")
     public String changePassword(@Valid @RequestBody RequestChangePasswordDto dto, HttpServletRequest request) {
         userService.changePassword(dto, request);
         return "비밀번호 변경 완료";
     }
 
     @Operation(summary = "비밀번호 초기화(관리자)", description = "비밀번호를 초기화합니다.")
-    @PutMapping("/reset/password")
+    @PatchMapping("/reset/password")
     public String resetPassword(@RequestBody RequestResetPasswordDto dto, HttpServletRequest request) {
         userService.resetPassword(dto.getStudentId(), request);
         return "비밀번호 초기화 완료";

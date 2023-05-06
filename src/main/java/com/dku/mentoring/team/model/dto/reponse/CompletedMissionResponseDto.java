@@ -4,16 +4,27 @@ import com.dku.mentoring.register.model.entity.Register;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 public class CompletedMissionResponseDto {
 
     private String missionName;
 
-    private int score;
+    private int totalScore;
+
+    private String missionInfo;
+
+    private String missionCategory;
+
+    private LocalDateTime lastModifiedAt;
 
     public CompletedMissionResponseDto(Register register) {
         this.missionName = register.getMission().getName();
-        this.score = register.getTotalScore();
+        this.totalScore = register.getTotalScore();
+        this.missionInfo = register.getMission().getInfo().getName();
+        this.missionCategory = register.getMission().getCategory().getName();
+        this.lastModifiedAt = register.getLastModifiedAt();
     }
 }

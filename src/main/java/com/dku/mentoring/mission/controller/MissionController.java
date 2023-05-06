@@ -56,6 +56,13 @@ public class MissionController {
         return ResponseEntity.ok().body(missionId);
     }
 
+    @Operation(summary = "추가 미션 등록", description = "추가 미션 등록")
+    @PostMapping("/create/bonus")
+    public ResponseEntity<Long> createBonusMission(@RequestBody BonusMissionCreateRequestDto dto, HttpServletRequest request) {
+        Long bonusMissionId = missionService.createBonusMission(dto, request);
+        return ResponseEntity.ok().body(bonusMissionId);
+    }
+
     @Operation(summary = "미션 난이도 조회", description = "미션 난이도 조회")
     @GetMapping("/difficulty")
     public List<ResponseDifficultyListDto> getDifficulty() {
@@ -70,12 +77,5 @@ public class MissionController {
         Pageable pageable = PageRequest.of(page - 1, size);
         MissionResponsePage<MissionResponseDto> missions = missionService.getMissionsByInfoId(infoId, pageable);
         return missions;
-    }
-
-    @Operation(summary = "추가 미션 등록", description = "추가 미션 등록")
-    @PostMapping("/create/bonus")
-    public ResponseEntity<Long> createBonusMission(@RequestBody BonusMissionCreateRequestDto dto, HttpServletRequest request) {
-        Long bonusMissionId = missionService.createBonusMission(dto, request);
-        return ResponseEntity.ok().body(bonusMissionId);
     }
 }

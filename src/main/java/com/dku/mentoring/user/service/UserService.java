@@ -1,7 +1,9 @@
 package com.dku.mentoring.user.service;
 
 import com.dku.mentoring.global.auth.JwtProvider;
+import com.dku.mentoring.team.exception.TeamNotFoundException;
 import com.dku.mentoring.team.model.entity.Team;
+import com.dku.mentoring.team.repository.TeamRepository;
 import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.entity.UserRole;
 import com.dku.mentoring.user.entity.dto.request.RequestChangePasswordDto;
@@ -30,6 +32,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
     private final UserRoleRepository roleRepository;
@@ -47,6 +50,9 @@ public class UserService {
 
         user.addRole(Collections.singletonList(UserRole.builder().rolename("ROLE_USER").build()));
 
+        if(teamRepository.findByTeamName(dto.getTeamName()).isPresent()){
+            throw new TeamNotFoundException("이미 존재하는 팀입니다.");
+        }
         Team team = Team.builder()
                 .user(user)
                 .teamName(dto.getTeamName())
@@ -130,7 +136,6 @@ public class UserService {
         }
 
         User user = userRepository.findByStudentId(studentId).orElseThrow(UserNotFoundException::new);
-        //TODO user가 관리자라면 예외처리를 해야하나?
         user.changePassword(passwordEncoder.encode("12345678!"));
     }
 }

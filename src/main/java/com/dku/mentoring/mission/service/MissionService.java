@@ -62,10 +62,8 @@ public class MissionService {
         return new SingleMissionResponseDto(mission);
     }
 
-
     /**
      * 미션 생성
-     * MissionBonus는 직접 추가,,
      *
      * @param dto 미션 정보
      */
@@ -104,7 +102,7 @@ public class MissionService {
 
     /**
      * 미션 난이도 조회
-     * <p>
+     *
      * 미션 등록 리스트에서 난이도를 선택해서 등록할 수 있게끔 하기 위해서 구현
      */
     public List<ResponseDifficultyListDto> getInfo() {
