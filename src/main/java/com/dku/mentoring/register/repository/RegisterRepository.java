@@ -10,6 +10,6 @@ public interface RegisterRepository extends JpaRepository<Register, Long>{
 
     Page<Register> findByUserId(Long userId, Pageable pageable);
 
-    @Query("select r from Register r where r.status != 'COMPLETE'")
+    @Query("select r from Register r where r.status != 'COMPLETE' order by r.lastModifiedAt DESC")
     Page<Register> findAllRegisters(Pageable pageable);
 }
