@@ -6,7 +6,6 @@ import com.dku.mentoring.mission.model.dto.response.*;
 import com.dku.mentoring.mission.service.MissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,11 +34,11 @@ public class MissionController {
 
     @Operation(summary = "미션 검색", responses = {@ApiResponse(responseCode = "200", description = "미션 검색 성공")})
     @GetMapping("/search")
-    public MissionResponsePage<MissionResponseDto> getMissionsByDescription(@RequestParam(defaultValue = "1") int page,
-                                                                            @RequestParam(defaultValue = "10") int size,
-                                                                            @RequestParam String keyword) {
+    public MissionResponsePage<MissionResponseDto> getMissionsByKeyword(@RequestParam(defaultValue = "1") int page,
+                                                                        @RequestParam(defaultValue = "10") int size,
+                                                                        @RequestParam String keyword) {
         Pageable pageable = PageRequest.of(page - 1, size);
-        MissionResponsePage<MissionResponseDto> mission = missionService.getMissionsByDescription(keyword, pageable);
+        MissionResponsePage<MissionResponseDto> mission = missionService.getMissionsByKeyword(keyword, pageable);
         return mission;
     }
 
