@@ -20,6 +20,9 @@ public class SummarizedRegisterDto {
     @Schema(description = "제목", example = "등록 제목")
     private final String title;
 
+    @Schema(description = "본문", example = "본문")
+    private final String body;
+
     @Schema(description = "팀명", example = "팀명")
     private final String teamName;
 
@@ -41,6 +44,7 @@ public class SummarizedRegisterDto {
     public SummarizedRegisterDto(Register register) {
         this.id = register.getId();
         this.title = register.getTitle();
+        this.body = register.getBody();
         this.teamName = register.getUser().getTeam().getTeamName();
         this.missionName = register.getMission().getName();
         this.status = register.getStatus();
