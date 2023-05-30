@@ -46,11 +46,11 @@ public class MissionService {
     /**
      * 미션 조회
      *
-     * @param description 키워드
+     * @param keyword 키워드
      * @param pageable    페이징 정보
      */
-    public MissionResponsePage<MissionResponseDto> getMissionsByDescription(String description, Pageable pageable) {
-        Page<MissionResponseDto> missions = missionRepository.findByDescriptionContaining(description, pageable).map(MissionResponseDto::new);
+    public MissionResponsePage<MissionResponseDto> getMissionsByKeyword(String keyword, Pageable pageable) {
+        Page<MissionResponseDto> missions = missionRepository.findByNameContaining(keyword, pageable).map(MissionResponseDto::new);
         return new MissionResponsePage<>(missions);
     }
 
