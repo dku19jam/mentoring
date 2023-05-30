@@ -49,6 +49,7 @@ public class SingleRegisterResponseDto {
     @Schema(description = "수정 일시", example = "2021-01-01T00:00:00")
     private final LocalDateTime lastModifiedAt;
 
+    @Schema(description = "이미지파일", example = "1")
     private final List<Long> registerFiles;
 
     public SingleRegisterResponseDto(Register register) {
