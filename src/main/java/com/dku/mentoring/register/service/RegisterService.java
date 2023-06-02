@@ -90,12 +90,7 @@ public class RegisterService {
      */
     public Page<SummarizedRegisterDto> getRegisters(Pageable pageable) {
         pageable = makeToDesc(pageable);
-        Page<Register> progressRegisters = registerRepository.findAllRegistersWithProgress(pageable);
-        Page<Register> completedRegisters = registerRepository.findAllRegisterWithCompleted(pageable);
-
-        Page<Register> registers = new PageImpl<>(Stream.concat(progressRegisters.stream(), completedRegisters.stream())
-                .collect(Collectors.toList()), pageable, progressRegisters.getTotalElements() + completedRegisters.getTotalElements());
-
+        Page<Register> registers = registerRepository.findAllRegisters(pageable);
         return registers.map(SummarizedRegisterDto::new);
     }
 
