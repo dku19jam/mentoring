@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class CompletedMissionResponseDto {
 
+    private Long id;
+
     private String missionName;
 
     private int totalScore;
@@ -21,6 +23,7 @@ public class CompletedMissionResponseDto {
     private LocalDateTime lastModifiedAt;
 
     public CompletedMissionResponseDto(Register register) {
+        this.id = register.getId();
         this.missionName = register.getMission().getName();
         this.totalScore = register.getTotalScore();
         this.missionInfo = register.getMission().getInfo().getName();
