@@ -24,6 +24,7 @@ import com.dku.mentoring.user.exception.UserNotFoundException;
 import com.dku.mentoring.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -87,7 +90,12 @@ public class RegisterService {
      */
     public Page<SummarizedRegisterDto> getRegisters(Pageable pageable) {
         pageable = makeToDesc(pageable);
-        Page<Register> registers = registerRepository.findAllRegisters(pageable);
+        Page<Register> progressRegisters = registerRepository.findAllRegistersWithProgress(pageable);
+        Page<Register> completedRegisters = registerRepository.findAllRegisterWithCompleted(pageable);
+
+        Page<Register> registers = new PageImpl<>(Stream.concat(progressRegisters.stream(), completedRegisters.stream())
+                .collect(Collectors.toList()), pageable, progressRegisters.getTotalElements() + completedRegisters.getTotalElements());
+
         return registers.map(SummarizedRegisterDto::new);
     }
 
@@ -150,6 +158,9 @@ public class RegisterService {
         User user = getMemberFromRequest(request);
         if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN"))) {
             throw new NoRightToAccessException("해당 권한이 없습니다.");
+        }
+        if(register.getStatus().equals(RegisterStatus.COMPLETE)){
+            throw new RegisterAlreadyCompleteException("이미 승인 완료된 글입니다.");
         }
         register.approve(dto.getAdminBonusPoint());
     }
