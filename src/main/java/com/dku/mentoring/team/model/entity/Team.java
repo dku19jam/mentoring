@@ -38,5 +38,4 @@ public class Team {
         this.score += point;
     }
 
-
 }
