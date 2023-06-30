@@ -12,4 +12,7 @@ public interface RegisterRepository extends JpaRepository<Register, Long>{
 
     @Query("select r from Register r order by r.createdAt DESC")
     Page<Register> findAllRegisters(Pageable pageable);
+
+    @Query("select r from Register r where r.status = 'PROGRESS' order by r.createdAt ASC")
+    Page<Register> findAllProgressRegisters(Pageable pageable);
 }

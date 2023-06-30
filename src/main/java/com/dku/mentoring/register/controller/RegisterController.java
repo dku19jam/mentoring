@@ -49,6 +49,16 @@ public class RegisterController {
         return new ResponsePage<>(registers);
     }
 
+    @Operation(summary = "미승인된 글 전체 조회", responses = {@ApiResponse(responseCode = "200", description = "미승인된 글 전체 조회 성공")})
+    @GetMapping("/progress")
+    public ResponsePage<SummarizedRegisterDto> getProgressRegisters(HttpServletRequest request,
+                                                                    @RequestParam(defaultValue = "1") int page,
+                                                                    @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<SummarizedRegisterDto> registers = registerService.getProgressRegisters(request, pageable);
+        return new ResponsePage<>(registers);
+    }
+
     @Operation(summary = "사용자 등록 글 전체 조회", responses = {@ApiResponse(responseCode = "200", description = "사용자 등록 글 전체 조회 성공")})
     @GetMapping("/my-team")
     public ResponsePage<SummarizedRegisterDto> getRegistersByUser(HttpServletRequest request,
