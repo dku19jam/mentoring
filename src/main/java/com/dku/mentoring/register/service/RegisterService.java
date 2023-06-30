@@ -95,6 +95,25 @@ public class RegisterService {
     }
 
     /**
+     * 미승인된 글 전체 조회
+     *
+     * 관리자만 접근 가능
+     *
+     * @param pageable 페이징 방법
+     */
+    public Page<SummarizedRegisterDto> getProgressRegisters(HttpServletRequest request, Pageable pageable) {
+        User user = getMemberFromRequest(request);
+
+        if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN"))) {
+            throw new NoRightToAccessException("해당 권한이 없습니다.");
+        }
+
+        pageable = makeToAsc(pageable);
+        Page<Register> progressRegisters = registerRepository.findAllProgressRegisters(pageable);
+        return progressRegisters.map(SummarizedRegisterDto::new);
+    }
+
+    /**
      * 사용자가 등록 글 전체 조회
      *
      */
@@ -178,5 +197,12 @@ public class RegisterService {
      */
     private static PageRequest makeToDesc(Pageable pageable) {
         return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().descending());
+    }
+
+    /**
+     * 페이징 방법을 오름차순으로 변경
+     */
+    private static PageRequest makeToAsc(Pageable pageable) {
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort().ascending());
     }
 }
