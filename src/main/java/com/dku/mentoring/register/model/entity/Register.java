@@ -79,4 +79,8 @@ public class Register extends BaseEntity {
         this.mission = mission;
     }
 
+    public void changeStatusToProgress() {
+        this.status = RegisterStatus.PROGRESS;
+        this.totalScore = mission.getPoint();
+    }
 }
