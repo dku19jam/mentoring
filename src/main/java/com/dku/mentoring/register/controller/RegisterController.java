@@ -97,6 +97,14 @@ public class RegisterController {
         return "승인 성공";
     }
 
+    @Operation(summary = "승인 완료된 글 취소", responses = {@ApiResponse(responseCode = "200", description = "승인 완료된 글 취소 성공")})
+    @PatchMapping("/{registerId}/cancel")
+    public String cancelRegister(@PathVariable Long registerId, HttpServletRequest request) {
+
+        registerService.cancelApproveRegister(registerId, request);
+        return "취소 성공";
+    }
+
     @Operation(summary = "미션 인증 글 등록", description = "미션 인증 글 등록" )
     @PostMapping(value = "/{missionId}/register")
     public ResponseIdDto register(HttpServletRequest request, @PathVariable Long missionId, @Valid @ModelAttribute RegisterRequestDto dto) {
