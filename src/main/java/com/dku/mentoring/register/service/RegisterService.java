@@ -10,6 +10,7 @@ import com.dku.mentoring.mission.repository.MissionBonusRepository;
 import com.dku.mentoring.mission.repository.MissionRepository;
 import com.dku.mentoring.register.exception.NoRightToAccessException;
 import com.dku.mentoring.register.exception.RegisterAlreadyCompleteException;
+import com.dku.mentoring.register.exception.RegisterNotCompleteException;
 import com.dku.mentoring.register.exception.RegisterNotfoundException;
 import com.dku.mentoring.register.model.dto.list.SummarizedRegisterDto;
 import com.dku.mentoring.register.model.dto.request.AdminApproveRequestDto;
@@ -19,6 +20,7 @@ import com.dku.mentoring.register.model.entity.Register;
 import com.dku.mentoring.register.model.entity.RegisterFile;
 import com.dku.mentoring.register.model.entity.RegisterStatus;
 import com.dku.mentoring.register.repository.RegisterRepository;
+import com.dku.mentoring.team.model.entity.Team;
 import com.dku.mentoring.user.entity.User;
 import com.dku.mentoring.user.exception.UserNotFoundException;
 import com.dku.mentoring.user.repository.UserRepository;
@@ -177,6 +179,26 @@ public class RegisterService {
             throw new RegisterAlreadyCompleteException("이미 승인 완료된 글입니다.");
         }
         register.approve(dto.getAdminBonusPoint());
+    }
+
+    /**
+     * 승인 완료된 글 취소
+     */
+    @Transactional
+    public void cancelApproveRegister(Long registerId, HttpServletRequest request) {
+        Register register = registerRepository.findById(registerId).orElseThrow(() -> new RegisterNotfoundException("해당 글이 없습니다."));
+        User user = getMemberFromRequest(request);
+        if(user.getRoles().stream().noneMatch(role -> role.getRolename().equals("ROLE_ADMIN"))) {
+            throw new NoRightToAccessException("해당 권한이 없습니다.");
+        }
+        if(!register.getStatus().equals(RegisterStatus.COMPLETE)){
+            throw new RegisterNotCompleteException("승인 완료된 글이 아닙니다.");
+        }
+
+        Team team = register.getUser().getTeam();
+        team.addScore(-register.getTotalScore());
+        System.out.println("totalScore = " + register.getTotalScore()); //50
+        register.changeStatusToProgress();
     }
 
     /**
