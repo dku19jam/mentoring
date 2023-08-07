@@ -197,7 +197,6 @@ public class RegisterService {
 
         Team team = register.getUser().getTeam();
         team.addScore(-register.getTotalScore());
-        System.out.println("totalScore = " + register.getTotalScore()); //50
         register.changeStatusToProgress();
     }
 
